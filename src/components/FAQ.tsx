@@ -32,7 +32,7 @@ export const FAQ: FC = () => {
               <summary className="flex w-full cursor-pointer items-center justify-between list-none font-medium">
                 <span>{item.q}</span>
                 <svg
-                  className="ml-4 h-5 w-5 shrink-0 transition-transform duration-300 group-open:rotate-180"
+                  className="ml-4 h-5 w-5 shrink-0 transition-transform duration-[var(--timing-base)] group-open:rotate-180"
                   viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
@@ -42,16 +42,16 @@ export const FAQ: FC = () => {
               {/* Контейнер-гармошка: плавно меняем 'высоту' через grid-rows */}
               <div
                 className="mt-2 grid grid-rows-[0fr] overflow-hidden
-                           transition-[grid-template-rows] duration-300
-                           ease-[cubic-bezier(.2,.8,.2,1)]
+                           transition-[grid-template-rows] duration-[var(--timing-base)]
+                           ease-[var(--ease-smooth)]
                            group-open:grid-rows-[1fr] motion-reduce:transition-none"
               >
                 {/* Внутренний блок, чтобы сработал 0fr → 1fr */}
                 <div className="min-h-0 overflow-hidden">
                   <p
                     className="mb-0 text-black/70 opacity-0 translate-y-1
-                               transition-[opacity,transform] duration-500
-                               ease-[cubic-bezier(.2,.8,.2,1)]
+                               transition-[opacity,transform] duration-[var(--timing-slow)]
+                               ease-[var(--ease-smooth)]
                                group-open:opacity-100 group-open:translate-y-0
                                motion-reduce:transition-none"
                   >

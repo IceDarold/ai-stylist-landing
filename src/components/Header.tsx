@@ -27,7 +27,12 @@ export function Header() {
           {/* Desktop navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <Link key={item.href} href={item.href} className="text-sm text-black/70 hover:text-black" onClick={() => setMenuOpen(false)}>
+              <Link
+                key={item.href}
+                href={item.href}
+                className="text-sm text-black/70 hover:text-black transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
                 {item.label}
               </Link>
             ))}
@@ -60,7 +65,7 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-sm text-black/70"
+                  className="text-sm text-black/70 hover:text-black transition-colors"
                   onClick={() => setMenuOpen(false)}
                 >
                   {item.label}
