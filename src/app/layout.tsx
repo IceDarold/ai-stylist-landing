@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "./styles/tokens.css";
 
 export const metadata: Metadata = {
   title: "AI Stylist — Подбор образов по фото за 30 секунд",

@@ -7,7 +7,7 @@ export function FinalCTA() {
   const [state, setState] = useState<"idle" | "loading" | "ok" | "err">("idle");
   const [msg, setMsg] = useState<string>("");
 
-  const submit = async (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setState("loading");
     setMsg("");
@@ -22,9 +22,13 @@ export function FinalCTA() {
       setState("ok");
       setMsg("Готово! Мы сообщим о релизе и раннем доступе.");
       setEmail("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       setState("err");
-      setMsg(err.message || "Что-то пошло не так");
+      if (err instanceof Error) {
+        setMsg(err.message || "Что-то пошло не так");
+      } else {
+        setMsg("Что-то пошло не так");
+      }
     }
   };
 
