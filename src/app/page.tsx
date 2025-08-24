@@ -3,6 +3,7 @@ import { ScrollyCopy } from "@/components/ScrollyCopy";
 import { Benefits } from "@/components/Benefits";
 import { TryOn } from "@/components/TryOn";
 import { FinalCTA } from "@/components/FinalCTA";
+import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 
 export default function Page() {
@@ -12,6 +13,7 @@ export default function Page() {
       <ScrollyCopy text="Neo - это стилист на базе искусственного ителлекта, который помогает выбирать одежду проще, увереннее и быстрее на основе ваших персональных параметров и предпочтений." />
       <Benefits />
       <TryOn />
+      <FAQ />
       <FinalCTA />
       <Footer />
     </>
