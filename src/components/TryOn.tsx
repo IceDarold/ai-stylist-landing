@@ -38,15 +38,16 @@ export function TryOn() {
   return (
     <section id="how" className="py-28">
       {/* шире контейнер, чтобы всё стало крупнее */}
-      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-[1.1fr_.9fr]">
+      <div className="mx-auto max-w-7xl rounded-[32px] bg-white p-6 md:p-12 ring-1 ring-black/5 shadow-[0_50px_80px_rgba(24,20,18,.06)] grid grid-cols-1 items-center gap-12 md:grid-cols-[1.1fr_.9fr]">
+
         {/* Текст слева */}
         <div>
           <h2 className="font-serif text-5xl leading-tight">Virtual Try-On</h2>
-          <p className="mt-5 max-w-xl text-black/70">
+          <p className="mt-3 max-w-xl text-black/70">
             Визуализация показывает, как сидят вещи на вашей фигуре, сохраняя
             позу и пропорции. Варианты меняются примерно раз в секунду.
           </p>
-          <ul className="mt-6 list-disc pl-6 text-black/70">
+          <ul className="mt-4 list-disc pl-6 text-black/70">
             <li>Высокое качество визуализации</li>
             <li>Быстрее конкурентов</li>
             <li>Советы по размеру и фасону</li>
@@ -54,9 +55,10 @@ export function TryOn() {
         </div>
 
         {/* Визуализация справа */}
-        <div className="relative grid grid-cols-[minmax(280px,1fr)_auto] items-center gap-10 md:gap-12">
+        <div className="relative grid grid-cols-[minmax(320px,1fr)_auto] items-center justify-items-center gap-10 md:gap-12">
+
           {/* PERSON — без рамок/фона, PNG будет на прозрачном */}
-          <div className="relative aspect-[3/4] w-full">
+          <div className="relative aspect-[3/4] w-full max-w-[1060px] md:max-w-[640px] justify-self-center">
             <Image
               key={person}
               src={person}
@@ -65,7 +67,7 @@ export function TryOn() {
               // object-contain, чтобы силуэт не обрезался
               className="object-contain animate-fade"
               priority
-              sizes="(max-width:768px) 80vw, 520px"
+              sizes="(max-width:1968px) 890vw, 5200px"
             />
           </div>
 
@@ -110,17 +112,17 @@ export function TryOn() {
             src="/line-1.svg"
             alt=""
             aria-hidden
-            width={320}
-            height={24}
-            className="pointer-events-none absolute -left-10 top-[18%] hidden md:block opacity-50"
+            width={220}
+            height={18}
+            className="pointer-events-none absolute -left-4 top-[20%] hidden md:block opacity-50"
           />
           <Image
             src="/line-1.svg"
             alt=""
             aria-hidden
-            width={320}
-            height={24}
-            className="pointer-events-none absolute -left-10 bottom-[22%] hidden md:block opacity-50 rotate-180"
+            width={220}
+            height={18}
+            className="pointer-events-none absolute bottom-[20%] hidden md:block opacity-50 rotate-180"
           />
         </div>
       </div>

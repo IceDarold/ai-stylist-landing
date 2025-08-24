@@ -17,7 +17,7 @@ export function Hero() {
     <section className="relative h-[86vh] min-h-[560px] w-full overflow-hidden">
       <video
         ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-contain"
         src="/hero.mp4"
         playsInline
         autoPlay
@@ -32,19 +32,11 @@ export function Hero() {
           ИИ-стилист для реальных людей
         </span>
         <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[1.1]">
-          Shaping the future of fashion — теперь лично для вас
+          Поможем одеться быстро и стильно
         </h1>
         <p className="mt-4 max-w-xl text-lg text-black/70">
           Загрузите фото и получите 3 образа за 30 секунд. С точными размерами и ссылками на покупку.
         </p>
-        <div className="mt-8 flex gap-3">
-          <a href="#cta" className="btn btn-primary" aria-label="Получить образы">
-            Получить образы
-          </a>
-          <a href="#how" className="btn btn-secondary" aria-label="Как работает">
-            Как это работает
-          </a>
-        </div>
       </div>
     </section>
   );
