@@ -24,11 +24,7 @@ export function FinalCTA() {
       setEmail("");
     } catch (err: unknown) {
       setState("err");
-      if (err instanceof Error) {
-        setMsg(err.message || "Что-то пошло не так");
-      } else {
-        setMsg("Что-то пошло не так");
-      }
+      setMsg(err instanceof Error ? err.message : "Что-то пошло не так");
     }
   };
 
