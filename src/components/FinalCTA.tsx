@@ -50,7 +50,7 @@ export function FinalCTA() {
               onChange={(e) => setEmail(e.target.value)}
               aria-label="Email для подписки"
             />
-            <button disabled={state === "loading"} className="btn btn-primary" type="submit">
+            <button disabled={state === "loading"} className="button primary" type="submit">
               {state === "loading" ? "Отправка..." : "Подписаться"}
             </button>
           </form>
