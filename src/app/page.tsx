@@ -3,6 +3,7 @@ import { ScrollyCopy } from "@/components/ScrollyCopy";
 import { Benefits } from "@/components/Benefits";
 import { TryOn } from "@/components/TryOn";
 import { FinalCTA } from "@/components/FinalCTA";
+import { Footer } from "@/components/Footer";
 
 export default function Page() {
   return (
@@ -12,6 +13,7 @@ export default function Page() {
       <Benefits />
       <TryOn />
       <FinalCTA />
+      <Footer />
     </>
   );
 }
