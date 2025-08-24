@@ -17,17 +17,8 @@ export function Header() {
 
   return (
     <>
-      {/* Micro trust bar */}
-      <div className="bg-white/80 text-xs py-2">
-        <div className="container flex items-center gap-4 overflow-x-auto whitespace-nowrap md:justify-center md:overflow-visible">
-          <span>Фото можно загрузить без лица</span>
-          <span>Безопасные платежи: СБП, YooKassa</span>
-          <span>Работаем с партнёрами: WB | Ozon | Я.Маркет</span>
-        </div>
-      </div>
-
       {/* Main header */}
-      <header className="border-b bg-white/90 backdrop-blur">
+      <header className="bg-white/100 backdrop-blur sticky top-0 z-50 w-full">
         <div className="container flex items-center justify-between py-4">
           <Link href="/" className="flex items-center" aria-label="Stylist AI">
             <Image src="/logo.svg" alt="Stylist AI" width={120} height={24} />

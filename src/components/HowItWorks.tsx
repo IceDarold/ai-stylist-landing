@@ -8,7 +8,7 @@ export function HowItWorks() {
     "/items/top-3.jpg",
     "/items/bottom-1.jpg",
     "/items/bottom-2.jpg",
-    "/items/bottom-3.jpg"
+    "/items/bottom-3.jpg",
   ];
 
   return (
@@ -42,63 +42,75 @@ export function HowItWorks() {
 
           {/* Шаг 2 */}
           <div className="flex flex-col items-start">
-            <div className="flex w-full justify-center gap-2">
-              {looks.map((src) => (
-                <Image
-                  key={src}
-                  src={src}
-                  alt="Пример образа"
-                  width={96}
-                  height={128}
-                  className="h-auto w-1/3 rounded-lg object-cover"
-                  sizes="96px"
-                />
-              ))}
+            {/* фрейм той же высоты, что и слева */}
+            <div className="relative w-full aspect-[3/4]">
+              <div className="absolute inset-0 grid grid-cols-3 gap-2">
+                {looks.map((src) => (
+                  <div
+                    key={src}
+                    className="relative h-full w-full overflow-hidden rounded-lg"
+                  >
+                    <Image
+                      src={src}
+                      alt="Пример образа"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width:768px) 33vw, 11vw"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
             <p className="mt-4 text-lg font-medium">
-              AI-стилист собирает 3 персональных образа под вашу фигуру и бюджет
+              AI-стилист собирает 3 персональных образа…
             </p>
             <span className="badge neutral mt-2">&lt;30 секунд</span>
           </div>
 
           {/* Шаг 3 */}
           <div className="flex flex-col items-start">
-            <div className="relative w-full">
-              <div className="grid grid-cols-3 gap-2">
+            {/* такой же фрейм */}
+            <div className="relative w-full aspect-[3/4]">
+              <div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-2">
                 {items.map((src) => (
-                  <Image
+                  <div
                     key={src}
-                    src={src}
-                    alt="Товар из капсулы"
-                    width={96}
-                    height={128}
-                    className="h-auto w-full rounded-md object-cover"
-                    sizes="96px"
-                  />
+                    className="relative h-full w-full overflow-hidden rounded-md"
+                  >
+                    <Image
+                      src={src}
+                      alt="Товар из капсулы"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width:768px) 33vw, 11vw"
+                    />
+                  </div>
                 ))}
               </div>
-              <span className="badge brand absolute left-2 top-2">
+              <span className="badge brand absolute left-2 top-2 z-10">
                 Капсула за 25 000 ₽
               </span>
             </div>
             <p className="mt-4 text-lg font-medium">
-              Сразу переходите к покупке на маркетплейсах. 7 вещей = 20 сочетаний
+              Сразу переходите к покупке…
             </p>
             <span className="badge neutral mt-2">&lt;30 секунд</span>
           </div>
         </div>
 
+        {/* Партнёры */}
         <div className="mt-16 flex items-center justify-center gap-6 opacity-70">
           <Image src="/partners/wb.svg" alt="Wildberries" width={80} height={24} />
           <Image src="/partners/ozon.svg" alt="Ozon" width={80} height={24} />
           <Image src="/partners/yamarket.svg" alt="Я.Маркет" width={100} height={24} />
         </div>
+
         <p className="mt-4 text-center text-sm text-black/60">
           Фото хранятся ≤30 дней и удаляются по запросу
         </p>
 
         <div className="mt-8 text-center">
-          <a href="#cta" className="btn btn-primary">
+          <a href="#cta" className="button primary">
             Получить мои 3 образа
           </a>
         </div>
