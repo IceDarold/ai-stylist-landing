@@ -25,11 +25,12 @@ export const FAQ: FC = () => {
           {items.map((item) => (
             <details
               key={item.q}
-              className="group rounded-xl p-3 overflow-hidden
-                         transition-colors hover:bg-black/5 group-open:bg-black/5
-                         [&_summary::-webkit-details-marker]:hidden"
+              className="group rounded-xl overflow-hidden [&_summary::-webkit-details-marker]:hidden"
             >
-              <summary className="flex w-full cursor-pointer items-center justify-between list-none font-medium">
+              <summary
+                className="flex w-full cursor-pointer items-center justify-between list-none font-medium p-3
+                           transition-colors hover:bg-black/5 group-open:bg-black/5"
+              >
                 <span>{item.q}</span>
                 <svg
                   className="ml-4 h-5 w-5 shrink-0 transition-transform duration-[var(--timing-base)] group-open:rotate-180"
