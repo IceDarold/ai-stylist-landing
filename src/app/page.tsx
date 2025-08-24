@@ -4,6 +4,7 @@ import { Benefits } from "@/components/Benefits";
 import { TryOn } from "@/components/TryOn";
 import { FinalCTA } from "@/components/FinalCTA";
 import { FAQ } from "@/components/FAQ";
+import { Footer } from "@/components/Footer";
 
 export default function Page() {
   return (
@@ -14,6 +15,7 @@ export default function Page() {
       <TryOn />
       <FAQ />
       <FinalCTA />
+      <Footer />
     </>
   );
 }

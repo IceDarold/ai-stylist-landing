@@ -38,7 +38,7 @@ export function FinalCTA() {
             Оставьте почту и получите ранний доступ + персональную капсулу.
           </p>
 
-          <form onSubmit={submit} className="mx-auto mt-6 flex max-w-xl gap-3">
+          <form onSubmit={submit} className="mx-auto mt-6 flex max-w-xl items-center justify-center gap-3">
             <input
               className="input"
               id="email"
