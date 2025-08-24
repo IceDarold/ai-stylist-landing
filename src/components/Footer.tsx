@@ -6,11 +6,8 @@ export function Footer() {
     <footer className="bg-gray-50 mt-16">
       <div className="container py-10 space-y-10">
         {/* Top row with logo and CTA */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center">
           <Image src="/logo.svg" alt="Stylist AI" width={120} height={24} />
-          <Link href="#cta" className="btn btn-primary">
-            Попробовать
-          </Link>
         </div>
 
         {/* Columns */}
@@ -60,32 +57,6 @@ export function Footer() {
 
         {/* Mini FAQ */}
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2 md:flex-row md:gap-4">
-            <details className="flex-1">
-              <summary className="cursor-pointer font-medium">
-                Безопасно ли загружать фото?
-              </summary>
-              <p className="mt-2 text-sm text-black/70">
-                Да, все данные удаляются сразу после обработки.
-              </p>
-            </details>
-            <details className="flex-1">
-              <summary className="cursor-pointer font-medium">
-                Сколько стоит подписка?
-              </summary>
-              <p className="mt-2 text-sm text-black/70">
-                Базовые функции доступны бесплатно, подписка от 299 ₽.
-              </p>
-            </details>
-            <details className="flex-1">
-              <summary className="cursor-pointer font-medium">
-                Где доступно сейчас?
-              </summary>
-              <p className="mt-2 text-sm text-black/70">
-                Сервис работает по всей России.
-              </p>
-            </details>
-          </div>
 
           {/* Trust bar */}
           <div className="flex flex-col items-center gap-4">
