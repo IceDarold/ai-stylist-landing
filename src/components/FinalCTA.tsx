@@ -22,9 +22,9 @@ export function FinalCTA() {
       setState("ok");
       setMsg("Готово! Мы сообщим о релизе и раннем доступе.");
       setEmail("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       setState("err");
-      setMsg(err.message || "Что-то пошло не так");
+      setMsg(err instanceof Error ? err.message : "Что-то пошло не так");
     }
   };
 

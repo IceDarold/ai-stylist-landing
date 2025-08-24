@@ -88,6 +88,23 @@ a:hover { color: var(--brand-700); }
 }
 .input:focus { outline: 2px solid var(--brand-500); outline-offset:2px; }
 
+/* Layout helpers */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 640px) {
+  .container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
 .card {
   background:var(--bg-elev); border:1px solid var(--border);
   border-radius:var(--radius-lg); box-shadow:var(--shadow-1); padding:16px;
