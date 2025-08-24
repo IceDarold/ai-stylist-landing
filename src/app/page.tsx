@@ -3,6 +3,7 @@ import { ScrollyCopy } from "@/components/ScrollyCopy";
 import { Benefits } from "@/components/Benefits";
 import { HowItWorks } from "@/components/HowItWorks";
 import { TryOn } from "@/components/TryOn";
+import { Testimonials } from "@/components/Testimonials";
 import { FinalCTA } from "@/components/FinalCTA";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
@@ -15,6 +16,7 @@ export default function Page() {
       <Benefits />
       <HowItWorks />
       <TryOn />
+      <Testimonials />
       <FAQ />
       <FinalCTA />
       <Footer />
