@@ -66,7 +66,11 @@ export const FAQ: FC = () => {
                   <span className="hidden group-open:inline">–</span>
                 </span>
               </summary>
-              <p className="mt-2 text-black/70">{item.a}</p>
+              <p
+                className="mt-0 max-h-0 overflow-hidden text-black/70 opacity-0 transition-all duration-300 ease-in-out group-open:mt-2 group-open:max-h-96 group-open:opacity-100"
+              >
+                {item.a}
+              </p>
             </details>
           ))}
         </div>
