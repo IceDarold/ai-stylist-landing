@@ -4,6 +4,7 @@ import { Benefits } from "@/components/Benefits";
 import { TryOn } from "@/components/TryOn";
 import { FinalCTA } from "@/components/FinalCTA";
 import { Footer } from "@/components/Footer";
+import { Testimonials } from "@/components/Testimonials";
 
 export default function Page() {
   return (
@@ -12,6 +13,7 @@ export default function Page() {
       <ScrollyCopy text="Neo - это стилист на базе искусственного ителлекта, который помогает выбирать одежду проще, увереннее и быстрее на основе ваших персональных параметров и предпочтений." />
       <Benefits />
       <TryOn />
+      <Testimonials />
       <FinalCTA />
       <Footer />
     </>
