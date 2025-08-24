@@ -1,27 +1,14 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import "./styles/tokens.css"; // <- именно этот файл с твоими переменными/классами
 
-export const metadata: Metadata = {
-  title: "AI Stylist — Подбор образов по фото за 30 секунд",
-  description:
-    "Загрузите фото — получите 3 образа и капсулу с точными размерами и ссылками на покупку.",
-  openGraph: {
-    title: "AI Stylist — Подбор образов по фото",
-    description:
-      "3 образа за 30 секунд. Капсула «за Х ₽». Ссылки на покупку у партнёров.",
-    url: "https://example.com",
-    siteName: "AI Stylist",
-    images: [{ url: "/og.jpg", width: 1200, height: 630 }],
-    type: "website"
-  },
-  robots: { index: true, follow: true },
-  metadataBase: new URL("https://example.com")
-};
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { /* ... как было ... */ };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru">
-      <body>
+    <html lang="ru" data-theme="light">
+      <body className="bg-bg-base text-fg-primary font-sans antialiased">
         {children}
       </body>
     </html>

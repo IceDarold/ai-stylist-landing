@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <>
       <Hero />
-      <ScrollyCopy text="AIUTA is a modular AI innovation platform designed to help fashion brands transform how people shop, discover, and connect with fashion." />
+      <ScrollyCopy text="Neo - это стилист на базе искусственного ителлекта, который помогает выбирать одежду проще, увереннее и быстрее на основе ваших персональных параметров и предпочтений." />
       <Benefits />
       <TryOn />
       <FinalCTA />

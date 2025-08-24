@@ -1,33 +1,50 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
-const items = [
-  { label: "Top", src: "/items/top-1.jpg" },
-  { label: "Top", src: "/items/top-2.jpg" },
-  { label: "Top", src: "/items/top-3.jpg" },
-  { label: "Bottom", src: "/items/bottom-1.jpg" },
-  { label: "Bottom", src: "/items/bottom-2.jpg" }
+// пути из /public
+const persons = [
+  "/items/person-1.png",
+  "/items/person-2.png",
+  "/items/person-3.png",
+  "/items/person-4.png",
+];
+const tops = [
+  "/items/top-1.jpg",
+  "/items/top-2.jpg",
+  "/items/top-3.jpg",
+  "/items/top-4.jpg",
+];
+const bottoms = [
+  "/items/bottom-1.jpg",
+  "/items/bottom-2.jpg",
+  "/items/bottom-3.jpg",
+  "/items/bottom-4.jpg",
 ];
 
 export function TryOn() {
-  const [idx, setIdx] = useState(0);
-  const current = useMemo(() => items[idx % items.length], [idx]);
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
-    const id = setInterval(() => setIdx((i) => (i + 1) % items.length), 1000);
+    const id = setInterval(() => setTick((t) => t + 1), 2000);
     return () => clearInterval(id);
   }, []);
 
+  const person = persons[tick % persons.length];
+  const top = tops[tick % tops.length];
+  const bottom = bottoms[tick % bottoms.length];
+
   return (
-    <section id="how" className="py-24">
-      <div className="container grid items-center gap-12 md:grid-cols-[1.2fr_.8fr]">
+    <section id="how" className="py-28">
+      {/* шире контейнер, чтобы всё стало крупнее */}
+      <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:grid-cols-[1.1fr_.9fr]">
+        {/* Текст слева */}
         <div>
-          <h2 className="font-serif text-4xl leading-tight">Virtual Try-On</h2>
-          <p className="mt-4 max-w-xl text-black/70">
-            Визуализация показывает, как сидят вещи на вашей фигуре, сохраняя позу и пропорции.
-            Перебирайте варианты слева-направо — примерно раз в секунду.
+          <h2 className="font-serif text-5xl leading-tight">Virtual Try-On</h2>
+          <p className="mt-5 max-w-xl text-black/70">
+            Визуализация показывает, как сидят вещи на вашей фигуре, сохраняя
+            позу и пропорции. Варианты меняются примерно раз в секунду.
           </p>
           <ul className="mt-6 list-disc pl-6 text-black/70">
             <li>Высокое качество визуализации</li>
@@ -36,38 +53,93 @@ export function TryOn() {
           </ul>
         </div>
 
-        <div className="grid grid-cols-[1fr_auto] items-center gap-6">
-          <div className="relative aspect-[3/4] w-full overflow-hidden rounded-[var(--radius-lg)] border border-black/10 bg-white">
+        {/* Визуализация справа */}
+        <div className="relative grid grid-cols-[minmax(280px,1fr)_auto] items-center gap-10 md:gap-12">
+          {/* PERSON — без рамок/фона, PNG будет на прозрачном */}
+          <div className="relative aspect-[3/4] w-full">
             <Image
-              src="/person.jpg"
-              alt="Модель — пример посадки"
+              key={person}
+              src={person}
+              alt="Model"
               fill
-              sizes="(max-width: 768px) 90vw, 480px"
-              className="object-cover"
+              // object-contain, чтобы силуэт не обрезался
+              className="object-contain animate-fade"
               priority
+              sizes="(max-width:768px) 80vw, 520px"
             />
           </div>
 
-          <div className="flex flex-col gap-6">
-            <div className="relative w-40 overflow-hidden rounded-2xl border border-black/10 bg-white p-3 shadow-sm">
+          {/* ITEMS — прозрачные плитки, только подпись */}
+          <div className="relative flex flex-col items-center gap-8 md:gap-10">
+            {/* TOP */}
+            <figure className="flex w-[190px] flex-col items-center">
               <Image
-                key={current.src}
-                src={current.src}
-                alt={current.label}
-                width={260}
-                height={320}
-                className="mx-auto h-auto w-full animate-fade"
+                key={top}
+                src={top}
+                alt="Top"
+                width={220}
+                height={260}
+                className="h-auto w-full object-contain animate-fade rounded-2xl"
                 priority
               />
-              <div className="mt-2 text-center text-sm text-black/60">{current.label}</div>
-            </div>
+              <figcaption className="mt-2 text-center text-sm text-black/70">
+                Top
+              </figcaption>
+            </figure>
+
+            {/* BOTTOM */}
+            <figure className="flex w-[190px] flex-col items-center">
+              <Image
+                key={bottom}
+                src={bottom}
+                alt="Bottom"
+                width={220}
+                height={260}
+                className="h-auto w-full object-contain animate-fade"
+                priority
+              />
+              <figcaption className="mt-2 text-center text-sm text-black/70">
+                Bottom
+              </figcaption>
+            </figure>
           </div>
+
+          {/* ДЕКОРАТИВНЫЕ ТОЧЕЧНЫЕ ЛИНИИ (стрелки) */}
+          {/* line-1.* положи в /public/line-1.png или .svg */}
+          <Image
+            src="/line-1.svg"
+            alt=""
+            aria-hidden
+            width={320}
+            height={24}
+            className="pointer-events-none absolute -left-10 top-[18%] hidden md:block opacity-50"
+          />
+          <Image
+            src="/line-1.svg"
+            alt=""
+            aria-hidden
+            width={320}
+            height={24}
+            className="pointer-events-none absolute -left-10 bottom-[22%] hidden md:block opacity-50 rotate-180"
+          />
         </div>
       </div>
 
+      {/* Анимация появления */}
       <style jsx global>{`
-        @keyframes fadeIn { from { opacity: .0; transform: translateY(4px) } to { opacity: 1; transform: translateY(0)} }
-        .animate-fade { animation: fadeIn 220ms ease-out; }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fade {
+          animation: fadeIn 220ms ease-out;
+        }
       `}</style>
     </section>
   );
