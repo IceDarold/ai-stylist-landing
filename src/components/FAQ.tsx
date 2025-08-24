@@ -25,11 +25,11 @@ export const FAQ: FC = () => {
           {items.map((item) => (
             <details
               key={item.q}
-              className="group rounded-xl p-3 overflow-hidden
+              className="group rounded-xl overflow-hidden
                          transition-colors hover:bg-black/5 group-open:bg-black/5
                          [&_summary::-webkit-details-marker]:hidden"
             >
-              <summary className="flex w-full cursor-pointer items-center justify-between list-none font-medium">
+              <summary className="flex w-full cursor-pointer items-center justify-between list-none font-medium p-3">
                 <span>{item.q}</span>
                 <svg
                   className="ml-4 h-5 w-5 shrink-0 transition-transform duration-[var(--timing-base)] group-open:rotate-180"
@@ -41,13 +41,13 @@ export const FAQ: FC = () => {
 
               {/* Контейнер-гармошка: плавно меняем 'высоту' через grid-rows */}
               <div
-                className="mt-2 grid grid-rows-[0fr] overflow-hidden
+                className="px-3 pb-3 grid grid-rows-[0fr] overflow-hidden
                            transition-[grid-template-rows] duration-[var(--timing-base)]
                            ease-[var(--ease-smooth)]
                            group-open:grid-rows-[1fr] motion-reduce:transition-none"
               >
                 {/* Внутренний блок, чтобы сработал 0fr → 1fr */}
-                <div className="min-h-0 overflow-hidden">
+                <div className="mt-2 min-h-0 overflow-hidden">
                   <p
                     className="mb-0 text-black/70 opacity-0 translate-y-1
                                transition-[opacity,transform] duration-[var(--timing-slow)]
