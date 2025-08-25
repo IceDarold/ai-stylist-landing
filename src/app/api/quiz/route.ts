@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase-server";
 import { notifyTG } from "@/lib/notify";
 import { quizSchema } from "@/lib/validators";
+import { trackMetrica } from "@/lib/metrica";
 
 const rateMap = new Map<string, { count: number; time: number }>();
 function rateLimit(ip: string, limit = 20, windowMs = 60_000) {
@@ -64,6 +65,8 @@ export async function POST(req: Request) {
       lead_id: leadId,
       session_id: sessionId,
     });
+
+    trackMetrica(eventName);
 
     if (complete) {
       await notifyTG(`✅ Квиз завершён${email ? `: ${email}` : ""} (${sessionId})`);
