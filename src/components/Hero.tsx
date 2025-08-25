@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuiz } from "./QuizProvider";
 import Image from "next/image";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { open } = useQuiz();
+  const [email, setEmail] = useState("");
 
   return (
     <section className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
@@ -29,12 +30,22 @@ export function Hero() {
         <p className="mt-4 max-w-xl text-lg text-black/70">
           Загрузите фото и получите 3 образа за 30 секунд. С точными размерами и ссылками на покупку.
         </p>
-        <button
-          className="button primary mt-6"
-          onClick={open}
-        >
-          Попробовать бесплатно
-        </button>
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <input
+            type="email"
+            placeholder="Ваш email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="input w-full sm:w-auto"
+          />
+          <button
+            className="button primary"
+            onClick={() => open(email)}
+            disabled={!email}
+          >
+            Попробовать бесплатно
+          </button>
+        </div>
       </div>
     </section>
   );
