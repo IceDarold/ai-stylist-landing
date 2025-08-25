@@ -4,13 +4,14 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { Quiz } from "./Quiz";
 
 interface QuizContextValue {
-  open: () => void;
+  open: (email: string) => void;
 }
 
 const QuizContext = createContext<QuizContextValue | undefined>(undefined);
 
 export function QuizProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [initialEmail, setInitialEmail] = useState("");
 
   useEffect(() => {
     if (isOpen && typeof window !== "undefined") {
@@ -21,9 +22,16 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   }, [isOpen]);
 
   return (
-    <QuizContext.Provider value={{ open: () => setIsOpen(true) }}>
+    <QuizContext.Provider
+      value={{
+        open: (email: string) => {
+          setInitialEmail(email);
+          setIsOpen(true);
+        },
+      }}
+    >
       {children}
-      {isOpen && <Quiz onClose={() => setIsOpen(false)} />}
+      {isOpen && <Quiz initialEmail={initialEmail} onClose={() => setIsOpen(false)} />}
     </QuizContext.Provider>
   );
 }
