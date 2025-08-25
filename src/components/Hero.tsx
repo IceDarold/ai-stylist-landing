@@ -1,12 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuiz } from "./QuizProvider";
 import Image from "next/image";
 
 export function Hero() {
   const { open } = useQuiz();
   const [email, setEmail] = useState("");
+  const emailValid = /\S+@\S+\.\S+/.test(email);
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    // Автовоспроизведение тихого видео на iOS/desktop
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.play().catch(() => {});
+  }, []);
 
   return (
     <section id="hero" className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
@@ -36,15 +46,28 @@ export function Hero() {
         <p className="mt-4 max-w-xl text-lg text-black/70">
           Загрузите фото и получите 3 образа за 30 секунд. С точными размерами и ссылками на покупку.
         </p>
-        <div className="mt-6 flex w-full max-w-md flex-col gap-2 sm:flex-row">
+        <div
+          className={`mt-6 flex w-full max-w-md flex-col gap-2 sm:flex-row ${
+            showError && !emailValid ? "shake" : ""
+          }`}
+        >
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Ваш email"
-            className="input flex-1"
+            className={`input flex-1 ${showError && !emailValid ? "error" : ""}`}
           />
-          <button className="button primary" onClick={open}>
+          <button
+            className="button primary"
+            onClick={() => {
+              if (emailValid) open();
+              else {
+                setShowError(true);
+                setTimeout(() => setShowError(false), 800);
+              }
+            }}
+          >
             Попробовать бесплатно
           </button>
         </div>
