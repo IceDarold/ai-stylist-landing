@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuiz } from "./QuizProvider";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { open } = useQuiz();
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     // Автовоспроизведение тихого видео на iOS/desktop
@@ -39,12 +40,18 @@ export function Hero() {
         <p className="mt-4 max-w-xl text-lg text-black/70">
           Загрузите фото и получите 3 образа за 30 секунд. С точными размерами и ссылками на покупку.
         </p>
-        <button
-          className="button primary mt-6"
-          onClick={open}
-        >
-          Попробовать бесплатно
-        </button>
+        <div className="mt-6 flex w-full max-w-md flex-col gap-2 sm:flex-row">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Ваш email"
+            className="input flex-1"
+          />
+          <button className="button primary" onClick={open}>
+            Попробовать бесплатно
+          </button>
+        </div>
       </div>
     </section>
   );
