@@ -17,7 +17,8 @@ vi.mock("../src/lib/supabase-server", () => ({
 }));
 
 vi.mock("../src/lib/notify", () => ({ notifyTG: vi.fn() }));
-vi.mock("../src/lib/analytics-server", () => ({ captureEvent: vi.fn() }));
+const fetchMock = vi.fn(async () => new Response(null, { status: 200 }));
+vi.stubGlobal("fetch", fetchMock);
 
 describe("POST /api/subscribe", () => {
   it("returns ok for valid email", async () => {

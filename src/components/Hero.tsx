@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useQuiz } from "./QuizProvider";
+import { track } from "@/lib/plausible";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -41,7 +42,10 @@ export function Hero() {
         </p>
         <button
           className="button primary mt-6"
-          onClick={open}
+          onClick={() => {
+            track("cta_clicked", { placement: "hero" });
+            open();
+          }}
         >
           Попробовать бесплатно
         </button>
