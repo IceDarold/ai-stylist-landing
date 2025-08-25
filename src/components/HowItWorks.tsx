@@ -12,7 +12,7 @@ export function HowItWorks() {
   ];
 
   return (
-    <section className="py-24" aria-labelledby="hiw-title">
+    <section id="how" className="py-24" aria-labelledby="hiw-title">
       <div className="container">
         <h2 id="hiw-title" className="text-center font-serif text-4xl">
           Как это работает — 3 шага и готовые образы

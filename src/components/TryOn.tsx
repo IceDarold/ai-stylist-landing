@@ -36,7 +36,7 @@ export function TryOn() {
   const bottom = bottoms[tick % bottoms.length];
 
   return (
-    <section id="how" className="py-28">
+    <section id="examples" className="py-28">
       {/* шире контейнер, чтобы всё стало крупнее */}
       <div className="mx-auto max-w-7xl rounded-[32px] bg-white p-6 md:p-12 ring-1 ring-black/5 shadow-[0_50px_80px_rgba(24,20,18,.06)] grid grid-cols-1 items-center gap-12 md:grid-cols-[1.1fr_.9fr]">
 
