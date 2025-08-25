@@ -9,7 +9,7 @@ export function Hero() {
   const { open } = useQuiz();
 
   return (
-    <section className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
+    <section id="hero" className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
         <Image
             src="/hero.jpg"            // положи файл в /public/hero.jpg (или .webp)
             alt=""

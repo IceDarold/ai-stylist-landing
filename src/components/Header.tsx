@@ -10,9 +10,9 @@ export function Header() {
   const { open } = useQuiz();
 
   const navItems = [
+    { href: "#benefits", label: "Преимущества" },
     { href: "#how", label: "Как это работает" },
     { href: "#examples", label: "Примеры образов" },
-    { href: "#pricing", label: "Тарифы" },
     { href: "#faq", label: "FAQ" },
     { href: "#contacts", label: "Контакты" },
   ];
