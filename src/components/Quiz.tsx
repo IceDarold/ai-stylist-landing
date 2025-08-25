@@ -460,7 +460,7 @@ export function Quiz({ onClose }: QuizProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
       <div className="max-h-[90vh] w-full max-w-[720px] overflow-auto rounded-2xl bg-white p-6 sm:p-8 shadow-lg">
         {/* progress */}
-        <div className="mb-6 flex items-center justify-between text-sm">
+        <div className="mb-6 flex items-center justify-between text-sm text-gray-500">
           <div>
             Шаг {step + 1}/{totalSteps}
           </div>
@@ -469,7 +469,7 @@ export function Quiz({ onClose }: QuizProps) {
           </button>
         </div>
         <div
-          className="mb-6 h-1.5 w-full overflow-hidden rounded-full bg-gray-200"
+          className="mb-6 h-1.5 w-full overflow-hidden rounded-full bg-[#E9EAEC]"
           role="progressbar"
           aria-valuenow={step + 1}
           aria-valuemax={totalSteps}
