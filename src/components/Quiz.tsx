@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import StyleStep from "./quiz/StyleStep";
+import PhotoStep from "./quiz/PhotoStep";
 
 interface QuizProps {
   onClose: () => void;
@@ -75,6 +76,9 @@ export function Quiz({ onClose }: QuizProps) {
     marketplaces: [],
     avoid_items: [],
   });
+
+  const [photoValid, setPhotoValid] = useState(!!data.photo);
+  const [photoProcessing, setPhotoProcessing] = useState(false);
 
   const next = () => setStep((s) => Math.min(s + 1, totalSteps - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
@@ -160,22 +164,14 @@ export function Quiz({ onClose }: QuizProps) {
         );
       case "photo":
         return (
-          <div className="space-y-4">
-            <h2 className="mb-6 text-xl font-semibold">Фото</h2>
-            <input
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              onChange={(e) => update({ photo: e.target.files?.[0] })}
-            />
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={data.no_face}
-                onChange={(e) => update({ no_face: e.target.checked })}
-              />
-              Скрыть лицо
-            </label>
-          </div>
+          <PhotoStep
+            file={data.photo}
+            hideFace={data.no_face}
+            onFileChange={(file) => update({ photo: file })}
+            onHideFaceChange={(hide) => update({ no_face: hide })}
+            onValidityChange={setPhotoValid}
+            onProcessingChange={setPhotoProcessing}
+          />
         );
       case "body":
         return (
@@ -467,7 +463,12 @@ export function Quiz({ onClose }: QuizProps) {
             ✕
           </button>
         </div>
-        <div className="mb-6 h-2 w-full overflow-hidden rounded-full bg-gray-200">
+        <div
+          className="mb-6 h-[6px] w-full overflow-hidden rounded-full bg-gray-200"
+          role="progressbar"
+          aria-valuenow={step + 1}
+          aria-valuemax={totalSteps}
+        >
           <div
             className="h-full rounded-full bg-[var(--brand-500)] transition-all"
             style={{ width: `${((step + 1) / totalSteps) * 100}%` }}
@@ -484,8 +485,19 @@ export function Quiz({ onClose }: QuizProps) {
             <span />
           )}
           {step < totalSteps - 1 ? (
-            <button className="button primary" onClick={next}>
-              Далее
+            <button
+              className="button primary disabled:opacity-50"
+              onClick={next}
+              disabled={stepId === "photo" && (!photoValid || photoProcessing)}
+            >
+              {stepId === "photo" && photoProcessing ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                  Загрузка...
+                </span>
+              ) : (
+                "Далее"
+              )}
             </button>
           ) : (
             <button className="button primary" onClick={handleSubmit}>
