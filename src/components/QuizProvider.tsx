@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { Quiz } from "./Quiz";
+import { track } from "@/lib/plausible";
 
 interface QuizContextValue {
   open: () => void;
@@ -21,7 +22,10 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   }, [isOpen]);
 
   return (
-    <QuizContext.Provider value={{ open: () => setIsOpen(true) }}>
+    <QuizContext.Provider value={{ open: () => {
+      track("quiz_started");
+      setIsOpen(true);
+    } }}>
       {children}
       {isOpen && <Quiz onClose={() => setIsOpen(false)} />}
     </QuizContext.Provider>
