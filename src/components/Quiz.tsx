@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 
 interface QuizProps {
   onClose: () => void;
@@ -28,37 +27,30 @@ interface QuizData {
   brands_known: string[];
   marketplaces: string[];
   avoid_items: string[];
-  footwear_pref?: string;
 }
 
 export function Quiz({ onClose }: QuizProps) {
-  const router = useRouter();
   const stepOrder = [
     "goal",
     "budget",
     "city",
     "photo",
-    "height_cm",
-    "weight_kg",
+    "body",
     "age_band",
-    "top_size",
-    "bottom_waist",
-    "bottom_length",
+    "sizes",
     "shoe_ru",
-    "fit_pref_top",
-    "fit_pref_bottom",
     "style",
     "color_dislike",
     "brands_known",
     "marketplaces",
     "avoid_items",
-    "footwear_pref",
   ] as const;
   type StepId = (typeof stepOrder)[number];
 
   const totalSteps = stepOrder.length;
   const [step, setStep] = useState(0);
   const stepId: StepId = stepOrder[step];
+  const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState<QuizData>({
     goal: "office_casual",
     budget: 25000,
@@ -78,8 +70,7 @@ export function Quiz({ onClose }: QuizProps) {
 
   const handleSubmit = () => {
     console.log("quiz submit", data);
-    onClose();
-    router.push("/thanks");
+    setSubmitted(true);
   };
 
   useEffect(() => {
@@ -173,32 +164,34 @@ export function Quiz({ onClose }: QuizProps) {
             </label>
           </div>
         );
-      case "height_cm":
+      case "body":
         return (
           <div>
-            <h2 className="mb-6 text-xl font-semibold">Рост (см)</h2>
-            <input
-              type="number"
-              min={150}
-              max={210}
-              className="input w-full"
-              value={data.height_cm ?? ""}
-              onChange={(e) => update({ height_cm: Number(e.target.value) })}
-            />
-          </div>
-        );
-      case "weight_kg":
-        return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Вес (кг)</h2>
-            <input
-              type="number"
-              min={45}
-              max={160}
-              className="input w-full"
-              value={data.weight_kg ?? ""}
-              onChange={(e) => update({ weight_kg: Number(e.target.value) })}
-            />
+            <h2 className="mb-6 text-xl font-semibold">Рост и вес</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="mb-1 block">Рост (см)</label>
+                <input
+                  type="number"
+                  min={150}
+                  max={210}
+                  className="input w-full"
+                  value={data.height_cm ?? ""}
+                  onChange={(e) => update({ height_cm: Number(e.target.value) })}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block">Вес (кг)</label>
+                <input
+                  type="number"
+                  min={45}
+                  max={160}
+                  className="input w-full"
+                  value={data.weight_kg ?? ""}
+                  onChange={(e) => update({ weight_kg: Number(e.target.value) })}
+                />
+              </div>
+            </div>
           </div>
         );
       case "age_band":
@@ -217,47 +210,92 @@ export function Quiz({ onClose }: QuizProps) {
             </select>
           </div>
         );
-      case "top_size":
+      case "sizes":
         return (
           <div>
-            <h2 className="mb-6 text-xl font-semibold">Размер верха (RU)</h2>
-            <select
-              className="input w-full"
-              value={data.top_size ?? ""}
-              onChange={(e) => update({ top_size: e.target.value })}
+            <h2 className="mb-6 text-xl font-semibold">Параметры</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block">Размер верха (RU)</label>
+                <select
+                  className="input w-full"
+                  value={data.top_size ?? ""}
+                  onChange={(e) => update({ top_size: e.target.value })}
+                >
+                  <option value="">--</option>
+                  {Array.from({ length: 9 }, (_, i) => 44 + i * 2).map((v) => (
+                    <option key={v} value={String(v)}>
+                      {v}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block">Талия (см)</label>
+                <input
+                  type="number"
+                  className="input w-full"
+                  value={data.bottom_waist ?? ""}
+                  onChange={(e) => update({ bottom_waist: Number(e.target.value) })}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block">Длина низа (см)</label>
+                <input
+                  type="number"
+                  className="input w-full"
+                  value={data.bottom_length ?? ""}
+                  onChange={(e) => update({ bottom_length: Number(e.target.value) })}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block">Посадка верха</label>
+                <select
+                  className="input w-full"
+                  value={data.fit_pref_top ?? ""}
+                  onChange={(e) => update({ fit_pref_top: e.target.value })}
+                >
+                  <option value="">--</option>
+                  <option value="slim">Slim</option>
+                  <option value="regular">Regular</option>
+                  <option value="relaxed">Relaxed</option>
+                  <option value="any">Любая</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block">Посадка низа</label>
+                <select
+                  className="input w-full"
+                  value={data.fit_pref_bottom ?? ""}
+                  onChange={(e) => update({ fit_pref_bottom: e.target.value })}
+                >
+                  <option value="">--</option>
+                  <option value="tapered">Tapered</option>
+                  <option value="straight">Straight</option>
+                  <option value="relaxed">Relaxed</option>
+                  <option value="any">Любая</option>
+                </select>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="button mt-4"
+              onClick={() => {
+                update({
+                  top_size: undefined,
+                  bottom_waist: undefined,
+                  bottom_length: undefined,
+                  fit_pref_top: undefined,
+                  fit_pref_bottom: undefined,
+                });
+                next();
+              }}
             >
-              <option value="">--</option>
-              {Array.from({ length: 9 }, (_, i) => 44 + i * 2).map((v) => (
-                <option key={v} value={String(v)}>
-                  {v}
-                </option>
-              ))}
-              <option value="dont_know">Не знаю</option>
-            </select>
-          </div>
-        );
-      case "bottom_waist":
-        return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Талия</h2>
-            <input
-              type="number"
-              className="input w-full"
-              value={data.bottom_waist ?? ""}
-              onChange={(e) => update({ bottom_waist: Number(e.target.value) })}
-            />
-          </div>
-        );
-      case "bottom_length":
-        return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Длина низа</h2>
-            <input
-              type="number"
-              className="input w-full"
-              value={data.bottom_length ?? ""}
-              onChange={(e) => update({ bottom_length: Number(e.target.value) })}
-            />
+              Не знаю
+            </button>
+            <p className="mt-2 text-sm text-black/70">
+              Не уверены в параметрах? Нажмите «Не знаю» — наш ИИ подберёт значения автоматически.
+            </p>
           </div>
         );
       case "shoe_ru":
@@ -272,40 +310,6 @@ export function Quiz({ onClose }: QuizProps) {
               value={data.shoe_ru ?? ""}
               onChange={(e) => update({ shoe_ru: Number(e.target.value) })}
             />
-          </div>
-        );
-      case "fit_pref_top":
-        return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Посадка верха</h2>
-            <select
-              className="input w-full"
-              value={data.fit_pref_top ?? ""}
-              onChange={(e) => update({ fit_pref_top: e.target.value })}
-            >
-              <option value="">--</option>
-              <option value="slim">Slim</option>
-              <option value="regular">Regular</option>
-              <option value="relaxed">Relaxed</option>
-              <option value="any">Любая</option>
-            </select>
-          </div>
-        );
-      case "fit_pref_bottom":
-        return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Посадка низа</h2>
-            <select
-              className="input w-full"
-              value={data.fit_pref_bottom ?? ""}
-              onChange={(e) => update({ fit_pref_bottom: e.target.value })}
-            >
-              <option value="">--</option>
-              <option value="tapered">Tapered</option>
-              <option value="straight">Straight</option>
-              <option value="relaxed">Relaxed</option>
-              <option value="any">Любая</option>
-            </select>
           </div>
         );
       case "style":
@@ -461,24 +465,20 @@ export function Quiz({ onClose }: QuizProps) {
             </div>
           </div>
         );
-      case "footwear_pref":
-        return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Обувь</h2>
-            <select
-              className="input w-full"
-              value={data.footwear_pref ?? ""}
-              onChange={(e) => update({ footwear_pref: e.target.value })}
-            >
-              <option value="">--</option>
-              <option value="sneakers">Кроссовки</option>
-              <option value="loafers">Лоферы</option>
-              <option value="any">Любая</option>
-            </select>
-          </div>
-        );
     }
   };
+  if (submitted)
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+        <div className="max-h-full w-full max-w-lg overflow-auto rounded-xl bg-white p-6 text-center shadow-lg space-y-4">
+          <h2 className="text-xl font-semibold">Спасибо!</h2>
+          <p className="text-black/70">Мы уже получили ваши ответы и скоро подберём для вас 3 лука.</p>
+          <button className="button primary" onClick={onClose}>
+            Закрыть
+          </button>
+        </div>
+      </div>
+    );
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
       <div className="max-h-full w-full max-w-lg overflow-auto rounded-xl bg-white p-6 shadow-lg">
