@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import StyleStep from "./quiz/StyleStep";
 import ColorDislikeStep from "./quiz/ColorDislikeStep";
+import PhotoStep from "./quiz/PhotoStep";
 
 interface QuizProps {
   onClose: () => void;
@@ -57,14 +58,25 @@ export function Quiz({ onClose }: QuizProps) {
   const [data, setData] = useState<QuizData>({
     goal: "office_casual",
     budget: 25000,
-    city: "",
+    city: "Москва",
+    photo: null,
     no_face: true,
+    height_cm: 180,
+    weight_kg: 75,
+    age_band: "25_34",
+    top_size: "48",
+    bottom_waist: 82,
+    bottom_length: 100,
+    shoe_ru: 42,
+    fit_pref_top: "regular",
+    fit_pref_bottom: "straight",
     style: [],
     color_dislike: [],
     brands_known: ["", "", ""],
     marketplaces: [],
     avoid_items: [],
   });
+  const [photoValid, setPhotoValid] = useState(false);
 
   const next = () => setStep((s) => Math.min(s + 1, totalSteps - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
@@ -88,6 +100,14 @@ export function Quiz({ onClose }: QuizProps) {
       if (ymId) win.ym?.(Number(ymId), "reachGoal", event);
     }
   }, [stepId]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   const renderStep = () => {
     switch (stepId) {
@@ -150,22 +170,13 @@ export function Quiz({ onClose }: QuizProps) {
         );
       case "photo":
         return (
-          <div className="space-y-4">
-            <h2 className="mb-6 text-xl font-semibold">Фото</h2>
-            <input
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              onChange={(e) => update({ photo: e.target.files?.[0] })}
-            />
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={data.no_face}
-                onChange={(e) => update({ no_face: e.target.checked })}
-              />
-              Скрыть лицо
-            </label>
-          </div>
+          <PhotoStep
+            file={data.photo ?? null}
+            hideFace={data.no_face}
+            onChange={(f) => update({ photo: f })}
+            onHideFaceChange={(v) => update({ no_face: v })}
+            onValidChange={setPhotoValid}
+          />
         );
       case "body":
         return (
@@ -420,7 +431,7 @@ export function Quiz({ onClose }: QuizProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-      <div className="max-h-full w-full max-w-lg overflow-auto rounded-xl bg-white p-6 shadow-lg">
+      <div className="max-h-[90vh] w-full max-w-[720px] overflow-auto rounded-2xl bg-white p-6 sm:p-8 shadow-lg">
         {/* progress */}
         <div className="mb-6 flex items-center justify-between text-sm">
           <div>
@@ -430,7 +441,12 @@ export function Quiz({ onClose }: QuizProps) {
             ✕
           </button>
         </div>
-        <div className="mb-6 h-2 w-full overflow-hidden rounded-full bg-gray-200">
+        <div
+          className="mb-6 h-1.5 w-full overflow-hidden rounded-full bg-gray-200"
+          role="progressbar"
+          aria-valuenow={step + 1}
+          aria-valuemax={totalSteps}
+        >
           <div
             className="h-full rounded-full bg-[var(--brand-500)] transition-all"
             style={{ width: `${((step + 1) / totalSteps) * 100}%` }}
@@ -458,6 +474,7 @@ export function Quiz({ onClose }: QuizProps) {
                 }
                 next();
               }}
+              disabled={stepId === "photo" && !photoValid}
             >
               Далее
             </button>
