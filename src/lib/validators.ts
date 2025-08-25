@@ -14,7 +14,7 @@ export const quizSchema = z.object({
   sessionId: z.string().uuid(),
   email: z.string().email().optional(),
   answers: z.array(quizAnswerSchema).default([]),
-  complete: z.boolean().optional(),
+  complete: z.boolean().default(false),
 });
 
 export type SubscribeInput = z.infer<typeof subscribeSchema>;
