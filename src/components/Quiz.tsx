@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import StyleStep from "./quiz/StyleStep";
 import ColorDislikeStep from "./quiz/ColorDislikeStep";
 import PhotoStep from "./quiz/PhotoStep";
+import FavoriteBrandsStep, {
+  FavoriteBrandsState,
+} from "./quiz/FavoriteBrandsStep";
 
 interface QuizProps {
   onClose: () => void;
@@ -27,7 +30,7 @@ interface QuizData {
   fit_pref_bottom?: string;
   style: string[];
   color_dislike: string[];
-  brands_known: string[];
+  favoriteBrands: FavoriteBrandsState;
   marketplaces: string[];
   avoid_items: string[];
 }
@@ -72,7 +75,7 @@ export function Quiz({ onClose }: QuizProps) {
     fit_pref_bottom: "straight",
     style: [],
     color_dislike: [],
-    brands_known: ["", "", ""],
+    favoriteBrands: { selected: [], custom: [], autoPick: false },
     marketplaces: [],
     avoid_items: [],
   });
@@ -325,25 +328,10 @@ export function Quiz({ onClose }: QuizProps) {
         );
       case "brands_known":
         return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Знакомые бренды (до 3)</h2>
-            <div className="space-y-4">
-              {data.brands_known.map((b, idx) => (
-                <input
-                  key={idx}
-                  type="text"
-                  className="input w-full"
-                  maxLength={16}
-                  value={b}
-                  onChange={(e) => {
-                    const arr = [...data.brands_known];
-                    arr[idx] = e.target.value;
-                    update({ brands_known: arr });
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+          <FavoriteBrandsStep
+            initial={data.favoriteBrands}
+            onChange={(state) => update({ favoriteBrands: state })}
+          />
         );
       case "marketplaces":
         return (
