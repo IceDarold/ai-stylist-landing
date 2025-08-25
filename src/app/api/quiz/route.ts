@@ -40,30 +40,40 @@ export async function POST(req: Request) {
       leadId = lead.id;
     }
 
-    await supabase
+    const { error: sessionErr } = await supabase
       .from("quiz_sessions")
-      .upsert({ id: sessionId, lead_id: leadId, completed_at: complete ? new Date().toISOString() : null }, {
-        onConflict: "id",
-        ignoreDuplicates: false,
-      });
+      .upsert(
+        { id: sessionId, lead_id: leadId, completed_at: complete ? new Date().toISOString() : null },
+        {
+          onConflict: "id",
+          ignoreDuplicates: false,
+        }
+      );
+    if (sessionErr) throw sessionErr;
 
     if (answers && answers.length > 0) {
-      await supabase.from("quiz_answers").insert(
-        answers.map((a) => ({
-          session_id: sessionId,
-          question_key: a.key,
-          answer: a.value,
-        }))
-      );
+      const { error: answersErr } = await supabase
+        .from("quiz_answers")
+        .insert(
+          answers.map((a) => ({
+            session_id: sessionId,
+            question_key: a.key,
+            answer: a.value,
+          }))
+        );
+      if (answersErr) throw answersErr;
     }
 
     const eventName = complete ? "quiz_completed" : "quiz_step";
-    await supabase.from("events").insert({
-      name: eventName,
-      payload: { answers },
-      lead_id: leadId,
-      session_id: sessionId,
-    });
+    const { error: eventErr } = await supabase
+      .from("events")
+      .insert({
+        name: eventName,
+        payload: { answers },
+        lead_id: leadId,
+        session_id: sessionId,
+      });
+    if (eventErr) throw eventErr;
 
     if (complete) {
       await notifyTG(`✅ Квиз завершён${email ? `: ${email}` : ""} (${sessionId})`);
