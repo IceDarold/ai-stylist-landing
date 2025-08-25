@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import { toggleStyle } from "./styleLogic";
 
 export interface StyleStepProps {
   selected: string[];
@@ -10,34 +11,34 @@ export interface StyleStepProps {
 interface StyleOption {
   id: string;
   title: string;
-  chips: string[];
-  image: string;
+  tags: string[];
+  cover: string;
 }
 
 const OPTIONS: StyleOption[] = [
   {
     id: "minimal",
     title: "Минимализм",
-    chips: ["чистые линии", "нейтральная палитра"],
-    image: "/styles/minimalism.jpg",
+    tags: ["чистые линии", "нейтральная палитра"],
+    cover: "/quiz/styles/minimal.jpg",
   },
   {
     id: "smart_casual",
     title: "Смарт-кэжуал",
-    chips: ["офис-повседневно", "слои"],
-    image: "/styles/smart-casual.jpg",
+    tags: ["офис-повседневно", "слои"],
+    cover: "/quiz/styles/casual.jpg",
   },
   {
     id: "sport_casual",
     title: "Спорт-кэжуал",
-    chips: ["комфорт", "функционально"],
-    image: "/styles/sport-casual.jpg",
+    tags: ["комфорт", "функционально"],
+    cover: "/quiz/styles/sport.jpg",
   },
   {
     id: "street_light",
     title: "Стрит-лайт",
-    chips: ["свободный крой", "акцент-пара"],
-    image: "/styles/street-light.jpg",
+    tags: ["свободный крой", "акцент-пара"],
+    cover: "/quiz/styles/street.jpg",
   },
 ];
 
@@ -51,6 +52,7 @@ const AUTO_PICK: Record<string, string[]> = {
 export default function StyleStep({ selected, onChange, goal }: StyleStepProps) {
   const [auto, setAuto] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
+  const [limitHit, setLimitHit] = useState(false);
 
   useEffect(() => {
     if (auto) {
@@ -59,20 +61,26 @@ export default function StyleStep({ selected, onChange, goal }: StyleStepProps) 
     }
   }, [auto, goal, onChange]);
 
-  const toggle = (id: string) => {
-    setAuto(false);
-    const exists = selected.includes(id);
-    if (exists) {
-      onChange(selected.filter((s) => s !== id));
-      sendEvent("style_card_deselect", { style: id });
-    } else {
-      if (selected.length >= 2) {
-        alert("Можно выбрать до двух");
-        return;
-      }
-      onChange([...selected, id]);
-      sendEvent("style_card_select", { style: id });
+  const handleSelect = (id: string) => {
+    if (auto) {
+      const proceed = confirm(
+        "Отключить автоматический выбор и выбрать вручную?"
+      );
+      if (!proceed) return;
+      setAuto(false);
     }
+    const { next, limitHit } = toggleStyle(selected, id, 2);
+    if (limitHit) {
+      setLimitHit(true);
+      sendEvent("style_limit_hit", { style: id });
+      setTimeout(() => setLimitHit(false), 600);
+      return;
+    }
+    onChange(next);
+    sendEvent(next.includes(id) ? "style_select" : "style_deselect", {
+      id,
+      total: next.length,
+    });
   };
 
   const handleAuto = () => {
@@ -84,86 +92,126 @@ export default function StyleStep({ selected, onChange, goal }: StyleStepProps) 
     } else {
       onChange([]);
     }
-    sendEvent("style_autopick_toggle", { on: next });
+    sendEvent("style_auto_pick_toggle", { value: next });
   };
 
   const count = selected.length;
 
   useEffect(() => {
-    OPTIONS.forEach((opt) => sendEvent("style_card_view", { style: opt.id }));
+    OPTIONS.forEach((opt) => sendEvent("style_card_view", { id: opt.id }));
   }, []);
+
+  const displayCount = limitHit ? count + 1 : count;
 
   return (
     <div>
       <div className="mb-2 flex items-baseline justify-between">
         <h2 className="text-xl font-semibold">Стиль (до 2)</h2>
-        <div className="text-sm text-gray-500">{count}/2</div>
+        <div
+          className={clsx(
+            "text-sm",
+            limitHit ? "text-red-500" : "text-gray-500",
+            limitHit && "shake"
+          )}
+        >
+          {displayCount}/2
+        </div>
       </div>
-      <p className="mb-4 text-sm text-gray-500">
-        Выберите, как вы хотите выглядеть. Можно пропустить
+      <p className="mb-2 text-sm text-gray-500">
+        Выберите, как вы хотите выглядеть. Можно пропустить.
       </p>
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+      <p className="mb-4 text-xs text-gray-500">
+        Можно выбрать до двух. Не уверены — мы подскажем.
+      </p>
+      <div
+        className={clsx(
+          "flex gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-3 sm:overflow-visible sm:pb-0 md:grid-cols-4",
+          limitHit && "shake"
+        )}
+        role="listbox"
+        aria-multiselectable="true"
+      >
         {OPTIONS.map((opt) => {
           const isSelected = selected.includes(opt.id);
-          const disabled = !isSelected && count >= 2;
+          const disabled = auto || (!isSelected && count >= 2);
           return (
             <button
               key={opt.id}
               type="button"
-              role="button"
-              aria-pressed={isSelected}
-              onClick={() => toggle(opt.id)}
-              disabled={disabled}
+              role="option"
+              aria-selected={isSelected}
+              aria-disabled={disabled}
+              tabIndex={0}
+              onClick={() => handleSelect(opt.id)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  handleSelect(opt.id);
+                }
+              }}
               className={clsx(
-                "relative flex flex-col rounded-xl border p-3 text-left transition",
-                "aspect-[4/5] overflow-hidden",
+                "relative flex min-w-[240px] flex-col rounded-2xl border p-3 text-left transition",
+                "aspect-[4/5] overflow-hidden bg-[#F7F7F8] shadow-[0_6px_20px_rgba(0,0,0,0.06)] border-[#E8E9ED]",
                 disabled && "cursor-not-allowed opacity-40",
-                isSelected && "border-[2px] border-[var(--brand-500)] shadow",
-                !isSelected && "border-black/10 hover:shadow-md"
+                isSelected && "border-[var(--brand-500)]",
+                !isSelected && !disabled && "hover:-translate-y-0.5 hover:border-[var(--brand-500)]"
               )}
             >
-              <img
-                src={opt.image}
-                alt=""
-                className="mb-2 h-24 w-full rounded-md object-cover"
-                loading="lazy"
-              />
+              <div className="relative mb-2 aspect-[4/5] w-full overflow-hidden rounded-xl">
+                <img
+                  src={opt.cover}
+                  alt=""
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  onError={(e) => {
+                    e.currentTarget.src = "/file.svg";
+                  }}
+                />
+                <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/40 to-transparent" />
+              </div>
               <div className="font-medium">{opt.title}</div>
-              <div className="mt-1 flex flex-wrap gap-1 text-xs uppercase text-gray-500">
-                {opt.chips.map((chip) => (
+              <div className="mt-1 flex flex-wrap gap-1 text-xs text-gray-500">
+                {opt.tags.map((tag) => (
                   <span
-                    key={chip}
+                    key={tag}
                     className="rounded-full bg-gray-100 px-2 py-0.5"
                   >
-                    {chip}
+                    {tag}
                   </span>
                 ))}
               </div>
-              {isSelected && (
-                <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--brand-500)] text-white">
-                  ✓
-                </span>
-              )}
+                {isSelected && (
+                  <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--brand-500)] text-white">
+                    ✓
+                  </span>
+                )}
             </button>
           );
         })}
       </div>
-      <p className="mt-4 text-sm text-gray-500">
-        Можно выбрать до двух. Не уверены — мы подскажем.
-      </p>
-      <div className="mt-4 flex flex-wrap items-center gap-3">
-        <button
-          type="button"
-          onClick={handleAuto}
-          className={clsx(
-            "rounded-full border px-3 py-1 text-sm",
-            auto
-              ? "border-[var(--brand-500)] bg-[var(--brand-50)] text-[var(--brand-700)]"
-              : "border-gray-300 text-gray-600"
+      {limitHit && (
+        <div className="mt-2 text-sm text-red-500">Не более двух стилей</div>
+      )}
+      <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <button
+            type="button"
+            onClick={handleAuto}
+            className={clsx(
+              "rounded-full border px-3 py-1 text-sm",
+              auto
+                ? "border-[var(--brand-500)] bg-[var(--brand-50)] text-[var(--brand-700)]"
+                : "border-gray-300 text-gray-600"
+            )}
+          >
+            Не уверен — выбрать за меня
+          </button>
+          {auto && (
+            <div className="mt-1 text-xs text-gray-500">
+              Мы подберём стиль на основе ваших ответов
+            </div>
           )}
-        >
-          Не уверен — выбрать за меня
-        </button>
+        </div>
         <button
           type="button"
           className="text-sm text-[var(--brand-600)] underline"
@@ -175,9 +223,6 @@ export default function StyleStep({ selected, onChange, goal }: StyleStepProps) 
           Примеры
         </button>
       </div>
-      {count === 2 && (
-        <div className="mt-2 text-xs text-gray-500">Можно менять выбор</div>
-      )}
       {showExamples && <ExamplesModal onClose={() => setShowExamples(false)} />}
     </div>
   );
@@ -215,7 +260,7 @@ function ExamplesModal({ onClose }: { onClose: () => void }) {
             <div key={i} className="flex flex-col gap-2">
               <div className="aspect-[3/4] overflow-hidden rounded-lg bg-gray-100">
                 <img
-                  src={`/styles/examples/${tab}-${i}.jpg`}
+                  src={`/quiz/styles/examples/${tab}-${i}.jpg`}
                   alt=""
                   className="h-full w-full object-cover"
                   loading="lazy"
