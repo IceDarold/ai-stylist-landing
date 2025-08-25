@@ -26,6 +26,7 @@ interface QuizData {
   fit_pref_top?: string;
   fit_pref_bottom?: string;
   style: string[];
+  style_auto_pick: boolean;
   color_dislike: string[];
   brands_known: string[];
   marketplaces: string[];
@@ -71,6 +72,7 @@ export function Quiz({ onClose }: QuizProps) {
     fit_pref_top: "regular",
     fit_pref_bottom: "straight",
     style: [],
+    style_auto_pick: false,
     color_dislike: [],
     brands_known: ["", "", ""],
     marketplaces: [],
@@ -78,7 +80,16 @@ export function Quiz({ onClose }: QuizProps) {
   });
   const [photoValid, setPhotoValid] = useState(false);
 
-  const next = () => setStep((s) => Math.min(s + 1, totalSteps - 1));
+  const next = () => {
+    if (stepId === "style") {
+      sendEvent("quiz_next_click", {
+        step: step + 1,
+        selected: data.style,
+        autoPick: data.style_auto_pick,
+      });
+    }
+    setStep((s) => Math.min(s + 1, totalSteps - 1));
+  };
   const prev = () => setStep((s) => Math.max(s - 1, 0));
 
   const update = (fields: Partial<QuizData>) => setData((d) => ({ ...d, ...fields }));
@@ -312,6 +323,8 @@ export function Quiz({ onClose }: QuizProps) {
         return (
           <StyleStep
             selected={data.style}
+            autoPick={data.style_auto_pick}
+            onAutoChange={(v) => update({ style_auto_pick: v })}
             onChange={(style) => update({ style })}
             goal={data.goal}
           />
@@ -506,5 +519,14 @@ export function Quiz({ onClose }: QuizProps) {
       </div>
     </div>
   );
+}
+
+function sendEvent(event: string, props?: Record<string, unknown>) {
+  if (typeof window !== "undefined") {
+    const win = window as {
+      plausible?: (e: string, o?: Record<string, unknown>) => void;
+    };
+    win.plausible?.(event, props);
+  }
 }
 
