@@ -44,7 +44,7 @@ export function ScrollyCopy({
   const coloredCount = Math.round(progress * total);
 
   return (
-    <section className="py-28">
+    <section id="about" className="py-28">
       <div className="container">
         <h2
           ref={ref}

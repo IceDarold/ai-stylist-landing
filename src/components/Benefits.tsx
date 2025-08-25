@@ -20,7 +20,7 @@ const benefits: Benefit[] = [
 
 export function Benefits() {
   return (
-    <section className="py-16">
+    <section id="benefits" className="py-16">
       <div className="container grid gap-6 md:grid-cols-3" aria-label="Что вы получите">
         {benefits.map((b) => (
           <div key={b.title} className="card">
