@@ -4,6 +4,7 @@ import { useState } from "react";
 
 interface QuizProps {
   onClose: () => void;
+  initialEmail?: string;
 }
 
 // initial data structure
@@ -34,7 +35,7 @@ interface QuizData {
   consent_marketing: boolean;
 }
 
-export function Quiz({ onClose }: QuizProps) {
+export function Quiz({ onClose, initialEmail }: QuizProps) {
   const totalSteps = 6;
   const [step, setStep] = useState(0);
   const [tab, setTab] = useState<"photo" | "params">("photo");
@@ -49,7 +50,7 @@ export function Quiz({ onClose }: QuizProps) {
     marketplaces: [],
     avoid_items: [],
     contact_type: "email",
-    contact_value: "",
+    contact_value: initialEmail || "",
     consent_personal: false,
     consent_marketing: false,
   });
