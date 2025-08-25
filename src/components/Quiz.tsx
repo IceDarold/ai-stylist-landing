@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import StyleStep from "./quiz/StyleStep";
 import PhotoStep from "./quiz/PhotoStep";
+import FavoriteBrandsStep, { Brand } from "./quiz/FavoriteBrandsStep";
 
 interface QuizProps {
   onClose: () => void;
@@ -27,7 +27,9 @@ interface QuizData {
   fit_pref_bottom?: string;
   style: string[];
   color_dislike: string[];
-  brands_known: string[];
+  favorite_brands: Brand[];
+  favorite_brand_names_custom: string[];
+  auto_pick_brands: boolean;
   marketplaces: string[];
   avoid_items: string[];
 }
@@ -44,7 +46,7 @@ export function Quiz({ onClose }: QuizProps) {
     "shoe_ru",
     "style",
     "color_dislike",
-    "brands_known",
+    "favorite_brands",
     "marketplaces",
     "avoid_items",
     "submit",
@@ -72,7 +74,9 @@ export function Quiz({ onClose }: QuizProps) {
     fit_pref_bottom: "straight",
     style: [],
     color_dislike: [],
-    brands_known: ["", "", ""],
+    favorite_brands: [],
+    favorite_brand_names_custom: [],
+    auto_pick_brands: false,
     marketplaces: [],
     avoid_items: [],
   });
@@ -350,27 +354,20 @@ export function Quiz({ onClose }: QuizProps) {
             </div>
           </div>
         );
-      case "brands_known":
+      case "favorite_brands":
         return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Знакомые бренды (до 3)</h2>
-            <div className="space-y-4">
-              {data.brands_known.map((b, idx) => (
-                <input
-                  key={idx}
-                  type="text"
-                  className="input w-full"
-                  maxLength={16}
-                  value={b}
-                  onChange={(e) => {
-                    const arr = [...data.brands_known];
-                    arr[idx] = e.target.value;
-                    update({ brands_known: arr });
-                  }}
-                />
-              ))}
-            </div>
-          </div>
+          <FavoriteBrandsStep
+            initialSelected={data.favorite_brands}
+            initialCustom={data.favorite_brand_names_custom}
+            initialAutoPick={data.auto_pick_brands}
+            onChange={({ selected, custom, autoPick }) =>
+              update({
+                favorite_brands: selected,
+                favorite_brand_names_custom: custom,
+                auto_pick_brands: autoPick,
+              })
+            }
+          />
         );
       case "marketplaces":
         return (
