@@ -30,13 +30,11 @@ export function Footer() {
             <h3 className="font-semibold mb-2">Контакты</h3>
             <ul className="space-y-1 text-sm">
               <li>
-                <a href="mailto:support@stylistai.ru">support@stylistai.ru</a>
+                <a href="mailto:support@neo-fashion-ai.ru">support@neo-fashion-ai.ru</a>
               </li>
               <li>
-                <a href="tel:+7495XXXXXXX">+7 (495) XXX-XX-XX</a>
+                <a href="tel:+79950932524">+7 (995) 093-25-24</a>
               </li>
-              <li>ООО «Стайлист.АИ», ИНН, ОГРН</li>
-              <li>Адрес: Москва, ул. …</li>
             </ul>
           </div>
           <div>
