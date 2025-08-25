@@ -10,14 +10,6 @@ export function Hero() {
   const emailValid = /\S+@\S+\.\S+/.test(email);
   const [showError, setShowError] = useState(false);
 
-  useEffect(() => {
-    // Автовоспроизведение тихого видео на iOS/desktop
-    const v = videoRef.current;
-    if (!v) return;
-    v.muted = true;
-    v.play().catch(() => {});
-  }, []);
-
   return (
     <section id="hero" className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
         <Image
