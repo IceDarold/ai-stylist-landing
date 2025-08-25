@@ -1,6 +1,6 @@
 # AI Stylist Landing
 
-Landing page built with Next.js. It collects leads and quiz answers, writes server events to Supabase and PostHog and sends Telegram notifications.
+Landing page built with Next.js. It collects leads and quiz answers, writes server events to Supabase and sends Telegram notifications. Yandex Metrica is used for analytics.
 
 ## Setup
 
@@ -8,7 +8,7 @@ Landing page built with Next.js. It collects leads and quiz answers, writes serv
    ```bash
    pnpm install
    ```
-2. Copy `.env.example` to `.env` and fill in values for Supabase, PostHog and Telegram.
+2. Copy `.env.example` to `.env` and fill in values for Supabase, Yandex Metrica and Telegram.
 3. Apply database schema to your Supabase project:
    ```bash
    pnpm supabase < scripts/supabase.sql
@@ -39,8 +39,7 @@ See `.env.example` for the full list:
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
-- `POSTHOG_API_KEY` / `POSTHOG_API_HOST`
-- `NEXT_PUBLIC_POSTHOG_KEY` / `NEXT_PUBLIC_POSTHOG_HOST`
+- `NEXT_PUBLIC_YANDEX_METRICA_ID`
 
 ## Tests
 
