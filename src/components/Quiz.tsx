@@ -95,7 +95,7 @@ export function Quiz({ onClose }: QuizProps) {
         return (
           <div>
             <h2 className="mb-6 text-xl font-semibold">Под что собираем капсулу?</h2>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { value: "office_casual", label: "Офис" },
                 { value: "date", label: "Свидание" },
