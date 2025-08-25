@@ -2,10 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { useQuiz } from "./QuizProvider";
+import { track } from "@/lib/plausible";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { open } = useQuiz();
+
+  const handleClick = () => {
+    track("cta_clicked", { placement: "hero" });
+    open();
+  };
 
   useEffect(() => {
     // Автовоспроизведение тихого видео на iOS/desktop
@@ -41,7 +47,7 @@ export function Hero() {
         </p>
         <button
           className="button primary mt-6"
-          onClick={open}
+          onClick={handleClick}
         >
           Попробовать бесплатно
         </button>
