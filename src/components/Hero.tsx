@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useState } from "react";
+import { QuizModal } from "./QuizModal";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [quizOpen, setQuizOpen] = useState(false);
 
   useEffect(() => {
     // Автовоспроизведение тихого видео на iOS/desktop
@@ -37,7 +40,14 @@ export function Hero() {
         <p className="mt-4 max-w-xl text-lg text-black/70">
           Загрузите фото и получите 3 образа за 30 секунд. С точными размерами и ссылками на покупку.
         </p>
+        <button
+          className="button primary mt-6"
+          onClick={() => setQuizOpen(true)}
+        >
+          Получить 3 лука
+        </button>
       </div>
+      <QuizModal open={quizOpen} onClose={() => setQuizOpen(false)} />
     </section>
   );
 }
