@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useQuiz } from "./QuizProvider";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { open } = useQuiz();
 
   const navItems = [
     { href: "#how", label: "Как это работает" },
@@ -39,9 +41,15 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Link href="#cta" className="button primary hidden md:inline-flex">
+            <button
+              onClick={() => {
+                setMenuOpen(false);
+                open();
+              }}
+              className="button primary hidden md:inline-flex"
+            >
               Попробовать бесплатно
-            </Link>
+            </button>
             {/* Mobile hamburger */}
             <button
               className="md:hidden p-2"
@@ -71,9 +79,15 @@ export function Header() {
                   {item.label}
                 </Link>
               ))}
-              <Link href="#cta" className="button primary" onClick={() => setMenuOpen(false)}>
+              <button
+                className="button primary"
+                onClick={() => {
+                  setMenuOpen(false);
+                  open();
+                }}
+              >
                 Попробовать бесплатно
-              </Link>
+              </button>
             </div>
           </div>
         )}
