@@ -1,0 +1,9 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- N -->
+  <path d="M0 0V40H8V15L32 40H40V0H32V25L8 0H0Z" fill="#111111"/>
+  <!-- E as bars -->
+  <rect x="50" y="10" width="24" height="6" fill="#D9C5B5"/>
+  <rect x="50" y="24" width="24" height="6" fill="#D9C5B5"/>
+  <!-- O -->
+  <circle cx="96" cy="20" r="16" stroke="#111111" stroke-width="8" fill="none"/>
+</svg>

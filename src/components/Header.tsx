@@ -17,10 +17,17 @@ export function Header() {
   return (
     <>
       {/* Main header */}
-      <header className="bg-white/100 backdrop-blur sticky top-0 z-50 w-full">
+      <header className="fixed top-0 left-0 z-50 w-full bg-white/80 backdrop-blur">
         <div className="container flex items-center justify-between py-4">
-          <Link href="/" className="flex items-center" aria-label="Stylist AI">
-            <Image src="/logo.svg" alt="Stylist AI" width={120} height={24} />
+          <Link href="/" className="flex items-center" aria-label="NEO">
+            <Image
+              src="/neo-logo.svg"
+              alt="NEO"
+              width={120}
+              height={40}
+              className="h-10 w-auto md:h-12"
+              priority
+            />
           </Link>
 
           {/* Desktop navigation */}
