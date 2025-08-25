@@ -92,6 +92,25 @@ a:hover { color: var(--brand-700); }
   transition: border-color var(--timing-base) var(--ease-smooth),
               outline-color var(--timing-base) var(--ease-smooth);
 }
+.input.error {
+  border-color:#fca5a5;
+  animation:input-glow .8s ease;
+}
+.shake { animation:shake .4s ease; }
+
+@keyframes input-glow {
+  0% { box-shadow:0 0 0 rgba(239,68,68,0); background:var(--bg-elev); }
+  50% { box-shadow:0 0 8px rgba(239,68,68,.5); background:#fee2e2; }
+  100% { box-shadow:0 0 0 rgba(239,68,68,0); background:var(--bg-elev); }
+}
+
+@keyframes shake {
+  0%,100% { transform:translateX(0); }
+  20% { transform:translateX(-4px); }
+  40% { transform:translateX(4px); }
+  60% { transform:translateX(-4px); }
+  80% { transform:translateX(4px); }
+}
 .input:focus { outline: 2px solid var(--brand-500); outline-offset:2px; }
 
 /* Layout helpers */
