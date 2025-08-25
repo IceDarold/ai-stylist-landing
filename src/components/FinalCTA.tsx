@@ -5,7 +5,7 @@ import { useQuiz } from "./QuizProvider";
 
 export function FinalCTA() {
   const { open } = useQuiz();
-  const [email, setEmail] = useState("")
+  const [email, setEmail] = useState("");
   const emailValid = /\S+@\S+\.\S+/.test(email);
   const [showError, setShowError] = useState(false);
   return (
@@ -32,7 +32,7 @@ export function FinalCTA() {
             <button
               className="button primary"
               onClick={() => {
-                if (emailValid) open();
+                if (emailValid) open(email);
                 else {
                   setShowError(true);
                   setTimeout(() => setShowError(false), 800);
