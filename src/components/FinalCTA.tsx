@@ -6,6 +6,7 @@ import { useQuiz } from "./QuizProvider";
 export function FinalCTA() {
   const { open } = useQuiz();
   const [email, setEmail] = useState("");
+  const emailValid = /\S+@\S+\.\S+/.test(email);
   return (
     <section id="cta" className="py-24">
       <div className="container text-center">
@@ -23,7 +24,11 @@ export function FinalCTA() {
               placeholder="Ваш email"
               className="input flex-1"
             />
-            <button className="button primary" onClick={open}>
+            <button
+              className="button primary"
+              onClick={() => emailValid && open()}
+              disabled={!emailValid}
+            >
               Попробовать бесплатно
             </button>
           </div>

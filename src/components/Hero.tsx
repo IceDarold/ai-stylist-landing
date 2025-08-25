@@ -7,6 +7,15 @@ import Image from "next/image";
 export function Hero() {
   const { open } = useQuiz();
   const [email, setEmail] = useState("");
+  const emailValid = /\S+@\S+\.\S+/.test(email);
+
+  useEffect(() => {
+    // Автовоспроизведение тихого видео на iOS/desktop
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.play().catch(() => {});
+  }, []);
 
   return (
     <section id="hero" className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
@@ -44,7 +53,11 @@ export function Hero() {
             placeholder="Ваш email"
             className="input flex-1"
           />
-          <button className="button primary" onClick={open}>
+          <button
+            className="button primary"
+            onClick={() => emailValid && open()}
+            disabled={!emailValid}
+          >
             Попробовать бесплатно
           </button>
         </div>
