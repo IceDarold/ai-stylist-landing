@@ -5,7 +5,7 @@ import { useQuiz } from "./QuizProvider";
 
 export function FinalCTA() {
   const { open } = useQuiz();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("")
   const emailValid = /\S+@\S+\.\S+/.test(email);
   const [showError, setShowError] = useState(false);
   return (

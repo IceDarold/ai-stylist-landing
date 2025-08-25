@@ -7,9 +7,9 @@ import Link from "next/link";
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navItems = [
+    { href: "#benefits", label: "Преимущества" },
     { href: "#how", label: "Как это работает" },
     { href: "#examples", label: "Примеры образов" },
-    { href: "#pricing", label: "Тарифы" },
     { href: "#faq", label: "FAQ" },
     { href: "#contacts", label: "Контакты" },
   ];
