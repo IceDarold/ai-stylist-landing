@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useQuiz } from "./QuizProvider";
+import { track } from "@/lib/plausible";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,6 +44,7 @@ export function Header() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => {
+                track("cta_clicked", { placement: "hero" });
                 setMenuOpen(false);
                 open();
               }}
@@ -82,6 +84,7 @@ export function Header() {
               <button
                 className="button primary"
                 onClick={() => {
+                  track("cta_clicked", { placement: "hero" });
                   setMenuOpen(false);
                   open();
                 }}

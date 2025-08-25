@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase-server";
 import { notifyTG } from "@/lib/notify";
 import { quizSchema } from "@/lib/validators";
-import { captureEvent } from "@/lib/analytics-server";
+import { headers } from "next/headers";
 
 const rateMap = new Map<string, { count: number; time: number }>();
 function rateLimit(ip: string, limit = 20, windowMs = 60_000) {
@@ -66,10 +66,32 @@ export async function POST(req: Request) {
       session_id: sessionId,
     });
 
-    await captureEvent(eventName, {
-      distinct_id: leadId || sessionId,
-      answers_count: answers.length,
-    });
+    if (process.env.NEXT_PUBLIC_DISABLE_ANALYTICS !== "1") {
+      const props =
+        eventName === "quiz_completed"
+          ? { items_count: answers.length }
+          : { step: answers.length };
+      let forwardedFor = "";
+      try {
+        forwardedFor = headers().get("x-forwarded-for") ?? "";
+      } catch {
+        forwardedFor = req.headers.get("x-forwarded-for") ?? "";
+      }
+      await fetch("https://plausible.io/api/event", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "neo-fashion-ai-backend",
+          "X-Forwarded-For": forwardedFor,
+        },
+        body: JSON.stringify({
+          name: eventName,
+          url: "https://neo-fashion-ai.ru/quiz",
+          domain: "neo-fashion-ai.ru",
+          props,
+        }),
+      });
+    }
 
     if (complete) {
       await notifyTG(`✅ Квиз завершён${email ? `: ${email}` : ""} (${sessionId})`);

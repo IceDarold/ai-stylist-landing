@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase-server";
 import { notifyTG } from "@/lib/notify";
 import { subscribeSchema } from "@/lib/validators";
-import { captureEvent } from "@/lib/analytics-server";
+import { headers } from "next/headers";
 
 const rateMap = new Map<string, { count: number; time: number }>();
 
@@ -44,7 +44,28 @@ export async function POST(req: Request) {
       lead_id: lead.id,
     });
 
-    await captureEvent("lead_submitted", { source, distinct_id: lead.id, email });
+    if (process.env.NEXT_PUBLIC_DISABLE_ANALYTICS !== "1") {
+      let forwardedFor = "";
+      try {
+        forwardedFor = headers().get("x-forwarded-for") ?? "";
+      } catch {
+        forwardedFor = req.headers.get("x-forwarded-for") ?? "";
+      }
+      await fetch("https://plausible.io/api/event", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "neo-fashion-ai-backend",
+          "X-Forwarded-For": forwardedFor,
+        },
+        body: JSON.stringify({
+          name: "lead_submitted",
+          url: "https://neo-fashion-ai.ru/cta",
+          domain: "neo-fashion-ai.ru",
+          props: { source },
+        }),
+      });
+    }
     await notifyTG(`🆕 Новый лид: ${email}${source ? ` (${source})` : ""}`);
 
     return NextResponse.json({ ok: true });
