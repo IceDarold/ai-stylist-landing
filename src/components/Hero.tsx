@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useQuiz } from "@/components/quiz/QuizContext";
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { open } = useQuiz();
 
   useEffect(() => {
     // Автовоспроизведение тихого видео на iOS/desktop
@@ -37,6 +39,9 @@ export function Hero() {
         <p className="mt-4 max-w-xl text-lg text-black/70">
           Загрузите фото и получите 3 образа за 30 секунд. С точными размерами и ссылками на покупку.
         </p>
+        <button onClick={open} className="button primary mt-6">
+          Получить 3 лука
+        </button>
       </div>
     </section>
   );

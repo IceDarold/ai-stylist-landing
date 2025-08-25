@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useQuiz } from "@/components/quiz/QuizContext";
 
 export function FinalCTA() {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "ok" | "err">("idle");
   const [msg, setMsg] = useState<string>("");
+  const { open } = useQuiz();
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,6 +67,10 @@ export function FinalCTA() {
               {msg}
             </div>
           )}
+
+          <button onClick={open} className="button primary mt-6" type="button">
+            Получить 3 лука
+          </button>
         </div>
       </div>
     </section>

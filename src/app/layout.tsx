@@ -3,6 +3,7 @@ import "./styles/tokens.css"; // <- именно этот файл с твоим
 
 import type { Metadata } from "next";
 import { Header } from "@/components/Header";
+import { QuizProvider } from "@/components/quiz/QuizContext";
 
 export const metadata: Metadata = { /* ... как было ... */ };
 
@@ -10,8 +11,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ru" data-theme="light">
       <body className="bg-bg-base text-fg-primary font-sans antialiased">
-        <Header />
-        {children}
+        <QuizProvider>
+          <Header />
+          {children}
+        </QuizProvider>
       </body>
     </html>
   );
