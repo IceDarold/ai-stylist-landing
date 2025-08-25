@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import StyleStep from "./quiz/StyleStep";
+import ColorDislikeStep from "./quiz/ColorDislikeStep";
 
 interface QuizProps {
   onClose: () => void;
@@ -307,37 +307,10 @@ export function Quiz({ onClose }: QuizProps) {
         );
       case "color_dislike":
         return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Не любим цвета (до 3)</h2>
-            <div className="space-y-2">
-              {[
-                "black",
-                "white",
-                "blue",
-                "beige",
-                "green",
-                "brown",
-                "grey",
-                "bright",
-              ].map((c) => (
-                <label key={c} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={data.color_dislike.includes(c)}
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      update({
-                        color_dislike: checked
-                          ? [...data.color_dislike, c].slice(0, 3)
-                          : data.color_dislike.filter((v) => v !== c),
-                      });
-                    }}
-                  />
-                  {c}
-                </label>
-              ))}
-            </div>
-          </div>
+          <ColorDislikeStep
+            selected={data.color_dislike}
+            onChange={(color_dislike) => update({ color_dislike })}
+          />
         );
       case "brands_known":
         return (
