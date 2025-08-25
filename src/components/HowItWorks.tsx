@@ -1,6 +1,10 @@
+"use client";
+
 import Image from "next/image";
+import { useQuiz } from "./quiz/QuizContext";
 
 export function HowItWorks() {
+  const { openQuiz } = useQuiz();
   const looks = ["/items/person-1.png", "/items/person-2.png", "/items/person-3.png"];
   const items = [
     "/items/top-1.jpg",
@@ -110,9 +114,9 @@ export function HowItWorks() {
         </p>
 
         <div className="mt-8 text-center">
-          <a href="#cta" className="button primary">
+          <button onClick={openQuiz} className="button primary">
             Получить мои 3 образа
-          </a>
+          </button>
         </div>
       </div>
     </section>
