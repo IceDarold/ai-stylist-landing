@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase-server";
 import { notifyTG } from "@/lib/notify";
 import { subscribeSchema } from "@/lib/validators";
-import { captureEvent } from "@/lib/analytics-server";
 
 const rateMap = new Map<string, { count: number; time: number }>();
 
@@ -44,7 +43,6 @@ export async function POST(req: Request) {
       lead_id: lead.id,
     });
 
-    await captureEvent("lead_submitted", { source, distinct_id: lead.id, email });
     await notifyTG(`🆕 Новый лид: ${email}${source ? ` (${source})` : ""}`);
 
     return NextResponse.json({ ok: true });
