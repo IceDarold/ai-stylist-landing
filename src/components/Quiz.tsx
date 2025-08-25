@@ -499,7 +499,6 @@ export function Quiz({ onClose }: QuizProps) {
         </div>
 
         {renderStep()}
-
         <div className="mt-8 flex items-center justify-between">
           {step > 0 ? (
             <button className="button" onClick={prev}>
