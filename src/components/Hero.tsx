@@ -8,6 +8,11 @@ export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { open } = useQuiz();
   const [email, setEmail] = useState("");
+  const badges = [
+    "ИИ-стилист для реальных людей",
+    "3 образа за 30 секунд",
+    "Точные размеры и ссылки",
+  ];
 
   return (
     <section id="hero" className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
@@ -20,10 +25,17 @@ export function Hero() {
         />
       <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]" />
       <div className="relative z-10 container h-full flex flex-col items-start justify-center">
-        <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm">
-          <span className="h-2 w-2 rounded-full bg-[var(--brand-600)]" />
-          ИИ-стилист для реальных людей
-        </span>
+        <div className="flex flex-wrap gap-2">
+          {badges.map((badge) => (
+            <span
+              key={badge}
+              className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm"
+            >
+              <span className="h-2 w-2 rounded-full bg-[var(--brand-600)]" />
+              {badge}
+            </span>
+          ))}
+        </div>
         <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[1.1]">
           Поможем одеться быстро и стильно
         </h1>
