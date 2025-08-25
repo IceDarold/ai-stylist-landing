@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase-server";
 import { notifyTG } from "@/lib/notify";
 import { quizSchema } from "@/lib/validators";
-import { captureEvent } from "@/lib/analytics-server";
+import { track } from "@/lib/plausible-server";
 
 const rateMap = new Map<string, { count: number; time: number }>();
 function rateLimit(ip: string, limit = 20, windowMs = 60_000) {
@@ -66,9 +66,9 @@ export async function POST(req: Request) {
       session_id: sessionId,
     });
 
-    await captureEvent(eventName, {
-      distinct_id: leadId || sessionId,
-      answers_count: answers.length,
+    await track(eventName, {
+      url: "https://neo-fashion-ai.ru/quiz",
+      props: { answers_count: answers.length },
     });
 
     if (complete) {

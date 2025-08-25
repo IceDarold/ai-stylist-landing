@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@/lib/plausible";
 
 interface QuizProps {
   onClose: () => void;
@@ -54,7 +55,12 @@ export function Quiz({ onClose }: QuizProps) {
     consent_marketing: false,
   });
 
-  const next = () => setStep((s) => Math.min(s + 1, totalSteps - 1));
+  const next = () =>
+    setStep((s) => {
+      const nextStep = Math.min(s + 1, totalSteps - 1);
+      track("quiz_step", { step: nextStep });
+      return nextStep;
+    });
   const prev = () => setStep((s) => Math.max(s - 1, 0));
 
   const skip = () => next();
@@ -62,6 +68,7 @@ export function Quiz({ onClose }: QuizProps) {
   const update = (fields: Partial<QuizData>) => setData((d) => ({ ...d, ...fields }));
 
   const handleSubmit = () => {
+    track("quiz_completed");
     console.log("quiz submit", data);
     onClose();
   };

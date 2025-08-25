@@ -1,9 +1,15 @@
 "use client";
 
 import { useQuiz } from "./QuizProvider";
+import { track } from "@/lib/plausible";
 
 export function FinalCTA() {
   const { open } = useQuiz();
+
+  const handleClick = () => {
+    track("cta_clicked", { placement: "final_cta" });
+    open();
+  };
   return (
     <section id="cta" className="py-24">
       <div className="container text-center">
@@ -13,7 +19,7 @@ export function FinalCTA() {
           <p className="mt-3 text-lg text-black/70">
             Ответьте на 6 вопросов и получите 3 образа.
           </p>
-          <button className="button primary mt-6" onClick={open}>
+          <button className="button primary mt-6" onClick={handleClick}>
             Попробовать бесплатно
           </button>
         </div>
