@@ -36,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Script>
 
         {/* Yandex.Metrika */}
-        <Script id="ym" strategy="afterInteractive">
+        <Script id="ym-loader" strategy="afterInteractive">
           {`
             (function(m,e,t,r,i,k,a){
               m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -58,16 +58,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             });
           `}
         </Script>
-        {/* noscript-пиксель для случаев без JS */}
-        <noscript>
-          <div>
-            <img
-              src="https://mc.yandex.ru/watch/103876020"
-              style={{ position: "absolute", left: "-9999px" }}
-              alt=""
-            />
-          </div>
-        </noscript>
+
+{/* noscript-пиксель */}
+<noscript>
+  <div>
+    <img
+      src="https://mc.yandex.ru/watch/103876020"
+      style={{ position: "absolute", left: "-9999px" }}
+      alt=""
+    />
+  </div>
+</noscript>
+
+
       </body>
     </html>
   );
