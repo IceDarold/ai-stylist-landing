@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface QuizProps {
   onClose: () => void;
@@ -28,14 +29,13 @@ interface QuizData {
   marketplaces: string[];
   avoid_items: string[];
   footwear_pref?: string;
-  contact_type: "phone" | "email";
-  contact_value: string;
   consent_personal: boolean;
   consent_marketing: boolean;
 }
 
 export function Quiz({ onClose }: QuizProps) {
-  const totalSteps = 6;
+  const router = useRouter();
+  const totalSteps = 5;
   const [step, setStep] = useState(0);
   const [tab, setTab] = useState<"photo" | "params">("photo");
   const [data, setData] = useState<QuizData>({
@@ -48,8 +48,6 @@ export function Quiz({ onClose }: QuizProps) {
     brands_known: ["", "", ""],
     marketplaces: [],
     avoid_items: [],
-    contact_type: "email",
-    contact_value: "",
     consent_personal: false,
     consent_marketing: false,
   });
@@ -64,11 +62,12 @@ export function Quiz({ onClose }: QuizProps) {
   const handleSubmit = () => {
     console.log("quiz submit", data);
     onClose();
+    router.push("/thanks");
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="max-h-full w-full max-w-md overflow-auto rounded-md bg-white p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+      <div className="max-h-full w-full max-w-md overflow-auto rounded-lg bg-white p-6 shadow-lg">
         {/* progress */}
         <div className="mb-4 flex items-center justify-between text-sm">
           <div>
@@ -78,9 +77,9 @@ export function Quiz({ onClose }: QuizProps) {
             ✕
           </button>
         </div>
-        <div className="mb-4 h-1 w-full bg-gray-200">
+        <div className="mb-4 h-2 w-full overflow-hidden rounded-full bg-gray-200">
           <div
-            className="h-full bg-black"
+            className="h-full rounded-full bg-black"
             style={{ width: `${((step + 1) / totalSteps) * 100}%` }}
           />
         </div>
@@ -438,69 +437,24 @@ export function Quiz({ onClose }: QuizProps) {
                 <option value="any">Любая</option>
               </select>
             </div>
-          </div>
-        )}
-
-        {step === 5 && (
-          <div>
-            <h2 className="mb-4 text-lg font-semibold">Куда прислать подборку?</h2>
-            <div className="mb-4 space-y-2">
+            <div className="mt-6 space-y-3">
               <label className="flex items-center gap-2">
                 <input
-                  type="radio"
-                  name="contact_type"
-                  value="phone"
-                  checked={data.contact_type === "phone"}
-                  onChange={() => update({ contact_type: "phone" })}
+                  type="checkbox"
+                  checked={data.consent_personal}
+                  onChange={(e) => update({ consent_personal: e.target.checked })}
                 />
-                Телефон
+                Согласен на обработку ПДн
               </label>
               <label className="flex items-center gap-2">
                 <input
-                  type="radio"
-                  name="contact_type"
-                  value="email"
-                  checked={data.contact_type === "email"}
-                  onChange={() => update({ contact_type: "email" })}
+                  type="checkbox"
+                  checked={data.consent_marketing}
+                  onChange={(e) => update({ consent_marketing: e.target.checked })}
                 />
-                Email
+                Получать новости и акции
               </label>
             </div>
-            <div className="mb-4">
-              {data.contact_type === "phone" ? (
-                <input
-                  type="tel"
-                  placeholder="+7 (___) ___-__-__"
-                  className="input w-full"
-                  value={data.contact_value}
-                  onChange={(e) => update({ contact_value: e.target.value })}
-                />
-              ) : (
-                <input
-                  type="email"
-                  placeholder="you@example.com"
-                  className="input w-full"
-                  value={data.contact_value}
-                  onChange={(e) => update({ contact_value: e.target.value })}
-                />
-              )}
-            </div>
-            <label className="mb-2 flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={data.consent_personal}
-                onChange={(e) => update({ consent_personal: e.target.checked })}
-              />
-              Согласен на обработку ПДн
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={data.consent_marketing}
-                onChange={(e) => update({ consent_marketing: e.target.checked })}
-              />
-              Получать новости и акции
-            </label>
           </div>
         )}
 
@@ -515,7 +469,7 @@ export function Quiz({ onClose }: QuizProps) {
           )}
           {step < totalSteps - 1 ? (
             <div className="flex gap-2">
-              {step >= 3 && step <= 4 && (
+              {step === 3 && (
                 <button className="button" onClick={skip}>
                   Пропустить
                 </button>
@@ -528,7 +482,7 @@ export function Quiz({ onClose }: QuizProps) {
             <button
               className="button primary"
               onClick={handleSubmit}
-              disabled={!data.consent_personal || !data.contact_value}
+              disabled={!data.consent_personal}
             >
               Получить 3 лука
             </button>
