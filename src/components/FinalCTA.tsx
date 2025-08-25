@@ -13,7 +13,7 @@ export function FinalCTA() {
       <div className="container text-center">
         <div className="mx-auto max-w-2xl">
           <div className="mx-auto mb-4 h-8 w-10 rounded-md border border-black/10" aria-hidden />
-          <h2 className="font-serif text-4xl">Присоединяйтесь</h2>
+          <h2 className="font-serif text-3xl md:text-4xl">Присоединяйтесь</h2>
           <p className="mt-3 text-lg text-black/70">
             Ответьте на 6 вопросов и получите 3 образа.
           </p>

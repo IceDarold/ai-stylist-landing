@@ -19,7 +19,7 @@ export const FAQ: FC = () => {
   return (
     <section id="faq" className="py-16">
       <div className="container max-w-3xl">
-        <h2 className="text-center font-serif text-4xl">Есть вопросы? Мы рады ответить</h2>
+        <h2 className="text-center font-serif text-3xl md:text-4xl">Есть вопросы? Мы рады ответить</h2>
 
         <div className="mt-8 divide-y divide-black/10">
           {items.map((item) => (

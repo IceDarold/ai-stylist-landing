@@ -42,7 +42,7 @@ export function TryOn() {
 
         {/* Текст слева */}
         <div>
-          <h2 className="font-serif text-5xl leading-tight">Virtual Try-On</h2>
+          <h2 className="font-serif text-4xl md:text-5xl leading-tight">Virtual Try-On</h2>
           <p className="mt-3 max-w-xl text-black/70">
             Визуализация показывает, как сидят вещи на вашей фигуре, сохраняя
             позу и пропорции. Варианты меняются примерно раз в секунду.

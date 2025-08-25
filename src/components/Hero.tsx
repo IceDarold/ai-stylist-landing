@@ -32,7 +32,7 @@ export function Hero() {
             </span>
           ))}
         </div>
-        <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[1.1]">
+        <h1 className="mt-4 max-w-2xl font-serif text-4xl md:text-5xl leading-[1.1]">
           Поможем одеться быстро и стильно
         </h1>
         <p className="mt-4 max-w-xl text-lg text-black/70">

@@ -32,7 +32,7 @@ export function Testimonials() {
   return (
     <section id="testimonials" className="py-24">
       <div className="container">
-        <h2 className="font-serif text-4xl text-center">Нас любят клиенты</h2>
+        <h2 className="font-serif text-3xl md:text-4xl text-center">Нас любят клиенты</h2>
         <div
           className="mt-12 grid gap-8 md:grid-cols-3"
           aria-label="Отзывы клиентов"
