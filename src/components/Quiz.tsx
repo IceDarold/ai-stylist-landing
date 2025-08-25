@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { StyleStep } from "./StyleStep";
 
 interface QuizProps {
   onClose: () => void;
@@ -310,33 +311,11 @@ export function Quiz({ onClose }: QuizProps) {
         );
       case "style":
         return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Стиль (до 2)</h2>
-            <div className="space-y-2">
-              {[
-                "minimal",
-                "smart_casual",
-                "sport_casual",
-                "street_light",
-              ].map((s) => (
-                <label key={s} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={data.style.includes(s)}
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      update({
-                        style: checked
-                          ? [...data.style, s].slice(0, 2)
-                          : data.style.filter((v) => v !== s),
-                      });
-                    }}
-                  />
-                  {s}
-                </label>
-              ))}
-            </div>
-          </div>
+          <StyleStep
+            value={data.style}
+            onChange={(v) => update({ style: v })}
+            goal={data.goal}
+          />
         );
       case "color_dislike":
         return (
