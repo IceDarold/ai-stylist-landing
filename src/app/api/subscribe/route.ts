@@ -37,11 +37,14 @@ export async function POST(req: Request) {
       .single();
     if (error) throw error;
 
-    await supabase.from("events").insert({
-      name: "lead_submitted",
-      payload: { source },
-      lead_id: lead.id,
-    });
+    const { error: eventError } = await supabase
+      .from("events")
+      .insert({
+        name: "lead_submitted",
+        payload: { source },
+        lead_id: lead.id,
+      });
+    if (eventError) throw eventError;
 
     await notifyTG(`🆕 Новый лид: ${email}${source ? ` (${source})` : ""}`);
 
