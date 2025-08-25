@@ -31,6 +31,28 @@ interface QuizData {
   avoid_items: string[];
 }
 
+const defaultQuizData: QuizData = {
+  goal: "office_casual",
+  budget: 25000,
+  city: "",
+  photo: null,
+  no_face: true,
+  height_cm: undefined,
+  weight_kg: undefined,
+  age_band: "",
+  top_size: "",
+  bottom_waist: undefined,
+  bottom_length: undefined,
+  shoe_ru: undefined,
+  fit_pref_top: "",
+  fit_pref_bottom: "",
+  style: [],
+  color_dislike: [],
+  brands_known: ["", "", ""],
+  marketplaces: [],
+  avoid_items: [],
+};
+
 export function Quiz({ onClose }: QuizProps) {
   const stepOrder = [
     "goal",
@@ -54,17 +76,7 @@ export function Quiz({ onClose }: QuizProps) {
   const [step, setStep] = useState(0);
   const stepId: StepId = stepOrder[step];
   const [submitted, setSubmitted] = useState(false);
-  const [data, setData] = useState<QuizData>({
-    goal: "office_casual",
-    budget: 25000,
-    city: "",
-    no_face: true,
-    style: [],
-    color_dislike: [],
-    brands_known: ["", "", ""],
-    marketplaces: [],
-    avoid_items: [],
-  });
+  const [data, setData] = useState<QuizData>(defaultQuizData);
 
   const next = () => setStep((s) => Math.min(s + 1, totalSteps - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
