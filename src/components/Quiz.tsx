@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import StyleStep from "./quiz/StyleStep";
+import PhotoStep from "./quiz/PhotoStep";
 
 interface QuizProps {
   onClose: () => void;
@@ -75,6 +75,7 @@ export function Quiz({ onClose }: QuizProps) {
     marketplaces: [],
     avoid_items: [],
   });
+  const [photoReady, setPhotoReady] = useState(false);
 
   const next = () => setStep((s) => Math.min(s + 1, totalSteps - 1));
   const prev = () => setStep((s) => Math.max(s - 1, 0));
@@ -160,22 +161,13 @@ export function Quiz({ onClose }: QuizProps) {
         );
       case "photo":
         return (
-          <div className="space-y-4">
-            <h2 className="mb-6 text-xl font-semibold">Фото</h2>
-            <input
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              onChange={(e) => update({ photo: e.target.files?.[0] })}
-            />
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={data.no_face}
-                onChange={(e) => update({ no_face: e.target.checked })}
-              />
-              Скрыть лицо
-            </label>
-          </div>
+          <PhotoStep
+            file={data.photo ?? null}
+            hideFace={data.no_face}
+            onFileChange={(file) => update({ photo: file })}
+            onHideFaceChange={(v) => update({ no_face: v })}
+            onReadyChange={setPhotoReady}
+          />
         );
       case "body":
         return (
@@ -484,7 +476,14 @@ export function Quiz({ onClose }: QuizProps) {
             <span />
           )}
           {step < totalSteps - 1 ? (
-            <button className="button primary" onClick={next}>
+            <button
+              className="button primary"
+              onClick={() => {
+                sendEvent("quiz_next_click", { step: step + 1 });
+                next();
+              }}
+              disabled={stepId === "photo" && !photoReady}
+            >
               Далее
             </button>
           ) : (
@@ -496,5 +495,14 @@ export function Quiz({ onClose }: QuizProps) {
       </div>
     </div>
   );
+}
+
+function sendEvent(event: string, props?: Record<string, unknown>) {
+  if (typeof window !== "undefined") {
+    const win = window as {
+      plausible?: (e: string, o?: Record<string, unknown>) => void;
+    };
+    win.plausible?.(event, props);
+  }
 }
 
