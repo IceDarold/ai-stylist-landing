@@ -5,6 +5,8 @@ import StyleStep from "./quiz/StyleStep";
 import ColorDislikeStep from "./quiz/ColorDislikeStep";
 import PhotoStep from "./quiz/PhotoStep";
 import FavoriteBrandsStep, { type Brand } from "./quiz/FavoriteBrandsStep";
+import UseCaseStep from "./quiz/UseCaseStep";
+import type { SelectedUseCase } from "@/lib/usecases";
 
 interface QuizProps {
   onClose: () => void;
@@ -12,7 +14,8 @@ interface QuizProps {
 
 // initial data structure
 interface QuizData {
-  goal: string;
+  usecases: SelectedUseCase[];
+  auto_pick_usecases: boolean;
   budget: number;
   city: string;
   photo?: File | null;
@@ -37,7 +40,7 @@ interface QuizData {
 
 export function Quiz({ onClose }: QuizProps) {
   const stepOrder = [
-    "goal",
+    "usecases",
     "budget",
     "city",
     "photo",
@@ -59,7 +62,8 @@ export function Quiz({ onClose }: QuizProps) {
   const stepId: StepId = stepOrder[step];
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState<QuizData>({
-    goal: "office_casual",
+    usecases: [],
+    auto_pick_usecases: false,
     budget: 25000,
     city: "Москва",
     photo: null,
@@ -116,33 +120,14 @@ export function Quiz({ onClose }: QuizProps) {
 
   const renderStep = () => {
     switch (stepId) {
-      case "goal":
+      case "usecases":
         return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Под что собираем капсулу?</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                { value: "office_casual", label: "Офис" },
-                { value: "date", label: "Свидание" },
-                { value: "weekend", label: "Выходные" },
-                { value: "season_update", label: "Сезон" },
-              ].map((g) => (
-                <label
-                  key={g.value}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg border p-3 hover:bg-gray-50"
-                >
-                  <input
-                    type="radio"
-                    name="goal"
-                    value={g.value}
-                    checked={data.goal === g.value}
-                    onChange={(e) => update({ goal: e.target.value })}
-                  />
-                  {g.label}
-                </label>
-              ))}
-            </div>
-          </div>
+          <UseCaseStep
+            selected={data.usecases}
+            onChange={(usecases) => update({ usecases })}
+            auto={data.auto_pick_usecases}
+            onAutoChange={(v) => update({ auto_pick_usecases: v })}
+          />
         );
       case "budget":
         return (
@@ -318,7 +303,7 @@ export function Quiz({ onClose }: QuizProps) {
           <StyleStep
             selected={data.style}
             onChange={(style) => update({ style })}
-            goal={data.goal}
+            primaryUseCase={data.usecases[0]?.id || ""}
           />
         );
       case "color_dislike":
