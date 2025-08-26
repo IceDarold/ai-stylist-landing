@@ -44,10 +44,10 @@ const OPTIONS: StyleOption[] = [
 ];
 
 const AUTO_PICK: Record<string, string[]> = {
-  office_casual: ["casual", "classic"],
+  office: ["casual", "classic"],
   date: ["casual", "classic"],
   weekend: ["casual", "sport"],
-  season_update: ["minimal", "sport"],
+  season: ["minimal", "sport"],
 };
 
 export default function StyleStep({ selected, onChange, goal }: StyleStepProps) {
