@@ -4,7 +4,7 @@ import clsx from "clsx";
 export interface StyleStepProps {
   selected: string[];
   onChange: (styles: string[]) => void;
-  goal: string;
+  useCase?: string;
 }
 
 interface StyleOption {
@@ -44,13 +44,13 @@ const OPTIONS: StyleOption[] = [
 ];
 
 const AUTO_PICK: Record<string, string[]> = {
-  office_casual: ["casual", "classic"],
+  office: ["casual", "classic"],
   date: ["casual", "classic"],
   weekend: ["casual", "sport"],
-  season_update: ["minimal", "sport"],
+  season: ["minimal", "sport"],
 };
 
-export default function StyleStep({ selected, onChange, goal }: StyleStepProps) {
+export default function StyleStep({ selected, onChange, useCase }: StyleStepProps) {
   const [auto, setAuto] = useState(false);
   const [showExamples, setShowExamples] = useState(false);
   const [limitHit, setLimitHit] = useState(false);
@@ -58,10 +58,10 @@ export default function StyleStep({ selected, onChange, goal }: StyleStepProps) 
 
   useEffect(() => {
     if (auto) {
-      const defaults = AUTO_PICK[goal] || [];
+      const defaults = AUTO_PICK[useCase || ""] || [];
       onChange(defaults.slice(0, 2));
     }
-  }, [auto, goal, onChange]);
+  }, [auto, useCase, onChange]);
 
   useEffect(() => {
     if (limitHit) {
@@ -112,7 +112,7 @@ export default function StyleStep({ selected, onChange, goal }: StyleStepProps) 
     const next = !auto;
     setAuto(next);
     if (next) {
-      const defaults = AUTO_PICK[goal] || [];
+      const defaults = AUTO_PICK[useCase || ""] || [];
       onChange(defaults.slice(0, 2));
     } else {
       onChange([]);
