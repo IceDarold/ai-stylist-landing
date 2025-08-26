@@ -5,6 +5,8 @@ import StyleStep from "./quiz/StyleStep";
 import ColorDislikeStep from "./quiz/ColorDislikeStep";
 import PhotoStep from "./quiz/PhotoStep";
 import FavoriteBrandsStep, { type Brand } from "./quiz/FavoriteBrandsStep";
+import SizeStep from "./quiz/SizeStep";
+import type { SizeProfile } from "../types/sizes";
 
 interface QuizProps {
   onClose: () => void;
@@ -20,12 +22,8 @@ interface QuizData {
   height_cm?: number;
   weight_kg?: number;
   age_band?: string;
-  top_size?: string;
-  bottom_waist?: number;
-  bottom_length?: number;
+  sizes: SizeProfile;
   shoe_ru?: number;
-  fit_pref_top?: string;
-  fit_pref_bottom?: string;
   style: string[];
   color_dislike: string[];
   favorite_brands: Brand[];
@@ -67,12 +65,8 @@ export function Quiz({ onClose }: QuizProps) {
     height_cm: 180,
     weight_kg: 75,
     age_band: "25_34",
-    top_size: "48",
-    bottom_waist: 82,
-    bottom_length: 100,
+    sizes: { unit: "metric", autopick: false },
     shoe_ru: 42,
-    fit_pref_top: "regular",
-    fit_pref_bottom: "straight",
     style: [],
     color_dislike: [],
     favorite_brands: [],
@@ -223,82 +217,13 @@ export function Quiz({ onClose }: QuizProps) {
             </select>
           </div>
         );
-      case "measurements":
-        return (
-          <div>
-            <h2 className="mb-2 text-xl font-semibold">Размеры</h2>
-            <p className="mb-4 text-sm text-gray-600">
-              Не уверены в параметрах? Нажмите «Не знаю», и наши ИИ‑алгоритмы подберут их автоматически.
-            </p>
-            <div className="space-y-4">
-              <select
-                className="input w-full"
-                value={data.top_size ?? ""}
-                onChange={(e) => update({ top_size: e.target.value })}
-              >
-                <option value="">Размер верха (RU)</option>
-                {Array.from({ length: 9 }, (_, i) => 44 + i * 2).map((v) => (
-                  <option key={v} value={String(v)}>
-                    {v}
-                  </option>
-                ))}
-                <option value="dont_know">Не знаю</option>
-              </select>
-              <input
-                type="number"
-                className="input w-full"
-                value={data.bottom_waist ?? ""}
-                onChange={(e) => update({ bottom_waist: Number(e.target.value) })}
-                placeholder="Талия"
-              />
-              <input
-                type="number"
-                className="input w-full"
-                value={data.bottom_length ?? ""}
-                onChange={(e) => update({ bottom_length: Number(e.target.value) })}
-                placeholder="Длина низа"
-              />
-              <select
-                className="input w-full"
-                value={data.fit_pref_top ?? ""}
-                onChange={(e) => update({ fit_pref_top: e.target.value })}
-              >
-                <option value="">Посадка верха</option>
-                <option value="slim">Slim</option>
-                <option value="regular">Regular</option>
-                <option value="relaxed">Relaxed</option>
-                <option value="any">Любая</option>
-              </select>
-              <select
-                className="input w-full"
-                value={data.fit_pref_bottom ?? ""}
-                onChange={(e) => update({ fit_pref_bottom: e.target.value })}
-              >
-                <option value="">Посадка низа</option>
-                <option value="tapered">Tapered</option>
-                <option value="straight">Straight</option>
-                <option value="relaxed">Relaxed</option>
-                <option value="any">Любая</option>
-              </select>
-            </div>
-            <button
-              type="button"
-              className="mt-4 text-sm text-gray-600 underline"
-              onClick={() => {
-                update({
-                  top_size: "dont_know",
-                  bottom_waist: undefined,
-                  bottom_length: undefined,
-                  fit_pref_top: undefined,
-                  fit_pref_bottom: undefined,
-                });
-                next();
-              }}
-            >
-              Не знаю
-            </button>
-          </div>
-        );
+        case "measurements":
+          return (
+            <SizeStep
+              profile={data.sizes}
+              onChange={(p) => update({ sizes: p })}
+            />
+          );
       case "shoe_ru":
         return (
           <div>
