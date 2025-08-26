@@ -30,7 +30,7 @@ export default function FavoriteBrandsStep({
   useEffect(() => {
     fetch(`/api/brands/popular?tier=${tierTab}`)
       .then((r) => r.json())
-      .then(setPopular)
+      .then((d) => setPopular(d.items || []))
       .catch(() => setPopular([]));
   }, [tierTab]);
 
@@ -39,7 +39,7 @@ export default function FavoriteBrandsStep({
       if (!q.trim()) return setResults([]);
       fetch(`/api/brands/search?q=${encodeURIComponent(q.trim())}`)
         .then((r) => r.json())
-        .then(setResults)
+        .then((d) => setResults(d.items || []))
         .catch(() => setResults([]));
     }, 250);
     return () => clearTimeout(t);
