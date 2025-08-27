@@ -7,7 +7,7 @@ export function Footer() {
       <div className="container py-10 space-y-10">
         {/* Top row with logo and CTA */}
         <div className="flex items-center">
-          <Image src="/logo.svg" alt="Stylist AI" width={120} height={24} />
+          <Image src="/logo.svg" alt="AIuta" width={80} height={24} />
         </div>
 
         {/* Columns */}
