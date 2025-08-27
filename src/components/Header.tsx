@@ -1,26 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navItems = [
-    { href: "#benefits", label: "Преимущества" },
-    { href: "#how", label: "Как это работает" },
-    { href: "#examples", label: "Примеры образов" },
-    { href: "#faq", label: "FAQ" },
-    { href: "#contacts", label: "Контакты" },
+    { href: "#products", label: "Products", dropdown: true },
+    { href: "#tech", label: "Our Proprietary Tech" },
+    { href: "#company", label: "Company" },
+    { href: "#resources", label: "Resources" },
   ];
 
   return (
     <>
       {/* Main header */}
-      <header className="bg-white/100 backdrop-blur sticky top-0 z-50 w-full">
+      <header className="bg-[#f5f5f5] backdrop-blur sticky top-0 z-50 w-full">
         <div className="container flex items-center justify-between py-4">
-          <Link href="/" className="flex items-center" aria-label="Stylist AI">
-            <Image src="/logo.svg" alt="Stylist AI" width={120} height={24} />
+          <Link href="/" className="flex items-center" aria-label="AIUTA">
+            <span className="text-xl font-semibold">AIUTA</span>
           </Link>
 
           {/* Desktop navigation */}
@@ -29,27 +27,40 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm text-black/70 hover:text-black transition-colors"
+                className="text-sm text-black/70 hover:text-black transition-colors flex items-center gap-1"
                 onClick={() => setMenuOpen(false)}
               >
                 {item.label}
+                {item.dropdown && (
+                  <svg
+                    className="h-3 w-3"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9" />
+                  </svg>
+                )}
               </Link>
             ))}
           </nav>
 
           <div className="flex items-center gap-4">
             <Link
-              href="#cta"
+              href="#book"
               onClick={() => setMenuOpen(false)}
-              className="button primary hidden md:inline-flex"
+              className="button secondary hidden md:inline-flex"
             >
-              Попробовать бесплатно
+              Book a demo
             </Link>
             {/* Mobile hamburger */}
             <button
               className="md:hidden p-2"
               onClick={() => setMenuOpen((o) => !o)}
-              aria-label="Открыть меню"
+              aria-label="Open menu"
             >
               <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="3" y1="6" x2="21" y2="6" />
@@ -75,11 +86,11 @@ export function Header() {
                 </Link>
               ))}
               <Link
-                href="#cta"
-                className="button primary"
+                href="#book"
+                className="button secondary"
                 onClick={() => setMenuOpen(false)}
               >
-                Попробовать бесплатно
+                Book a demo
               </Link>
             </div>
           </div>
