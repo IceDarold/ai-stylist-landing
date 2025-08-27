@@ -7,6 +7,9 @@ import PhotoStep from "./quiz/PhotoStep";
 import FavoriteBrandsStep, { type Brand } from "./quiz/FavoriteBrandsStep";
 import MarketplacesStep from "./quiz/MarketplacesStep";
 import type { MarketplacesAnswer } from "@/types/marketplaces";
+import MeasurementsStep, { type SizeProfile } from "./quiz/MeasurementsStep";
+import UseCaseStep from "./quiz/UseCaseStep";
+import { type SelectedUseCase } from "./quiz/usecases.config";
 
 interface QuizProps {
   onClose: () => void;
@@ -14,7 +17,9 @@ interface QuizProps {
 
 // initial data structure
 interface QuizData {
-  goal: string;
+
+  usecases: SelectedUseCase[];
+  auto_pick_usecases: boolean;
   budget: number;
   city: string;
   photo?: File | null;
@@ -22,12 +27,8 @@ interface QuizData {
   height_cm?: number;
   weight_kg?: number;
   age_band?: string;
-  top_size?: string;
-  bottom_waist?: number;
-  bottom_length?: number;
+  sizes: SizeProfile;
   shoe_ru?: number;
-  fit_pref_top?: string;
-  fit_pref_bottom?: string;
   style: string[];
   color_dislike: string[];
   favorite_brands: Brand[];
@@ -35,11 +36,13 @@ interface QuizData {
   auto_pick_brands: boolean;
   marketplaces: MarketplacesAnswer;
   avoid_items: string[];
+
 }
+
 
 export function Quiz({ onClose }: QuizProps) {
   const stepOrder = [
-    "goal",
+    "usecases",
     "budget",
     "city",
     "photo",
@@ -61,7 +64,8 @@ export function Quiz({ onClose }: QuizProps) {
   const stepId: StepId = stepOrder[step];
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState<QuizData>({
-    goal: "office_casual",
+    usecases: [],
+    auto_pick_usecases: false,
     budget: 25000,
     city: "Москва",
     photo: null,
@@ -69,12 +73,8 @@ export function Quiz({ onClose }: QuizProps) {
     height_cm: 180,
     weight_kg: 75,
     age_band: "25_34",
-    top_size: "48",
-    bottom_waist: 82,
-    bottom_length: 100,
+    sizes: { unit: "metric", autopick: false },
     shoe_ru: 42,
-    fit_pref_top: "regular",
-    fit_pref_bottom: "straight",
     style: [],
     color_dislike: [],
     favorite_brands: [],
@@ -82,6 +82,7 @@ export function Quiz({ onClose }: QuizProps) {
     auto_pick_brands: false,
     marketplaces: { any_ok: false, preferred: [], excluded: [] },
     avoid_items: [],
+
   });
   const [photoValid, setPhotoValid] = useState(false);
 
@@ -118,33 +119,13 @@ export function Quiz({ onClose }: QuizProps) {
 
   const renderStep = () => {
     switch (stepId) {
-      case "goal":
+      case "usecases":
         return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Под что собираем капсулу?</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                { value: "office_casual", label: "Офис" },
-                { value: "date", label: "Свидание" },
-                { value: "weekend", label: "Выходные" },
-                { value: "season_update", label: "Сезон" },
-              ].map((g) => (
-                <label
-                  key={g.value}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg border p-3 hover:bg-gray-50"
-                >
-                  <input
-                    type="radio"
-                    name="goal"
-                    value={g.value}
-                    checked={data.goal === g.value}
-                    onChange={(e) => update({ goal: e.target.value })}
-                  />
-                  {g.label}
-                </label>
-              ))}
-            </div>
-          </div>
+          <UseCaseStep
+            selected={data.usecases}
+            autoPick={data.auto_pick_usecases}
+            onChange={(usecases, auto) => update({ usecases, auto_pick_usecases: auto })}
+          />
         );
       case "budget":
         return (
@@ -227,79 +208,12 @@ export function Quiz({ onClose }: QuizProps) {
         );
       case "measurements":
         return (
-          <div>
-            <h2 className="mb-2 text-xl font-semibold">Размеры</h2>
-            <p className="mb-4 text-sm text-gray-600">
-              Не уверены в параметрах? Нажмите «Не знаю», и наши ИИ‑алгоритмы подберут их автоматически.
-            </p>
-            <div className="space-y-4">
-              <select
-                className="input w-full"
-                value={data.top_size ?? ""}
-                onChange={(e) => update({ top_size: e.target.value })}
-              >
-                <option value="">Размер верха (RU)</option>
-                {Array.from({ length: 9 }, (_, i) => 44 + i * 2).map((v) => (
-                  <option key={v} value={String(v)}>
-                    {v}
-                  </option>
-                ))}
-                <option value="dont_know">Не знаю</option>
-              </select>
-              <input
-                type="number"
-                className="input w-full"
-                value={data.bottom_waist ?? ""}
-                onChange={(e) => update({ bottom_waist: Number(e.target.value) })}
-                placeholder="Талия"
-              />
-              <input
-                type="number"
-                className="input w-full"
-                value={data.bottom_length ?? ""}
-                onChange={(e) => update({ bottom_length: Number(e.target.value) })}
-                placeholder="Длина низа"
-              />
-              <select
-                className="input w-full"
-                value={data.fit_pref_top ?? ""}
-                onChange={(e) => update({ fit_pref_top: e.target.value })}
-              >
-                <option value="">Посадка верха</option>
-                <option value="slim">Slim</option>
-                <option value="regular">Regular</option>
-                <option value="relaxed">Relaxed</option>
-                <option value="any">Любая</option>
-              </select>
-              <select
-                className="input w-full"
-                value={data.fit_pref_bottom ?? ""}
-                onChange={(e) => update({ fit_pref_bottom: e.target.value })}
-              >
-                <option value="">Посадка низа</option>
-                <option value="tapered">Tapered</option>
-                <option value="straight">Straight</option>
-                <option value="relaxed">Relaxed</option>
-                <option value="any">Любая</option>
-              </select>
-            </div>
-            <button
-              type="button"
-              className="mt-4 text-sm text-gray-600 underline"
-              onClick={() => {
-                update({
-                  top_size: "dont_know",
-                  bottom_waist: undefined,
-                  bottom_length: undefined,
-                  fit_pref_top: undefined,
-                  fit_pref_bottom: undefined,
-                });
-                next();
-              }}
-            >
-              Не знаю
-            </button>
-          </div>
+          <MeasurementsStep
+            profile={data.sizes}
+            onChange={(sizes) => update({ sizes })}
+            height={data.height_cm}
+            weight={data.weight_kg}
+          />
         );
       case "shoe_ru":
         return (
@@ -320,7 +234,7 @@ export function Quiz({ onClose }: QuizProps) {
           <StyleStep
             selected={data.style}
             onChange={(style) => update({ style })}
-            goal={data.goal}
+            useCase={data.usecases[0]?.id}
           />
         );
       case "color_dislike":
@@ -454,6 +368,18 @@ export function Quiz({ onClose }: QuizProps) {
             <button
               className="button primary"
               onClick={() => {
+                if (stepId === "measurements") {
+                  const filled = Object.entries(data.sizes)
+                    .filter(([k, v]) => v !== undefined && !["unit","autopick"].includes(k))
+                    .map(([k]) => k);
+                  sendEvent("quiz_next_click", { step: 7, filled, autopick: data.sizes.autopick });
+                if (stepId === "usecases") {
+                  sendEvent("quiz_next_click", {
+                    step: 1,
+                    auto_pick: data.auto_pick_usecases,
+                    usecases: data.usecases,
+                  });
+                }
                 if (stepId === "color_dislike") {
                   sendEvent("quiz_next_click", {
                     step: 10,
