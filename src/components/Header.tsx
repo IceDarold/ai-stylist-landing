@@ -1,26 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navItems = [
-    { href: "#benefits", label: "Преимущества" },
-    { href: "#how", label: "Как это работает" },
-    { href: "#examples", label: "Примеры образов" },
-    { href: "#faq", label: "FAQ" },
-    { href: "#contacts", label: "Контакты" },
+    { href: "#products", label: "Products" },
+    { href: "#tech", label: "Our Proprietary Tech" },
+    { href: "#company", label: "Company" },
+    { href: "#resources", label: "Resources" },
   ];
 
   return (
     <>
       {/* Main header */}
-      <header className="bg-white/100 backdrop-blur sticky top-0 z-50 w-full">
+      <header className="bg-white/80 backdrop-blur sticky top-0 z-50 w-full shadow-sm">
         <div className="container flex items-center justify-between py-4">
-          <Link href="/" className="flex items-center" aria-label="Stylist AI">
-            <Image src="/logo.svg" alt="Stylist AI" width={120} height={24} />
+          <Link href="/" className="text-xl font-semibold" aria-label="AIUTA">
+            AIUTA
           </Link>
 
           {/* Desktop navigation */}
@@ -39,17 +37,17 @@ export function Header() {
 
           <div className="flex items-center gap-4">
             <Link
-              href="#cta"
+              href="#demo"
               onClick={() => setMenuOpen(false)}
-              className="button primary hidden md:inline-flex"
+              className="hidden md:inline-flex h-10 items-center justify-center rounded-md bg-black px-4 text-sm font-medium text-white hover:bg-black/80"
             >
-              Попробовать бесплатно
+              Book a demo
             </Link>
             {/* Mobile hamburger */}
             <button
               className="md:hidden p-2"
               onClick={() => setMenuOpen((o) => !o)}
-              aria-label="Открыть меню"
+              aria-label="Open menu"
             >
               <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="3" y1="6" x2="21" y2="6" />
@@ -75,11 +73,11 @@ export function Header() {
                 </Link>
               ))}
               <Link
-                href="#cta"
-                className="button primary"
+                href="#demo"
+                className="h-10 rounded-md bg-black px-4 text-sm font-medium text-white flex items-center justify-center hover:bg-black/80"
                 onClick={() => setMenuOpen(false)}
               >
-                Попробовать бесплатно
+                Book a demo
               </Link>
             </div>
           </div>
