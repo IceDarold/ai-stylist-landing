@@ -5,6 +5,8 @@ import StyleStep from "./quiz/StyleStep";
 import ColorDislikeStep from "./quiz/ColorDislikeStep";
 import PhotoStep from "./quiz/PhotoStep";
 import FavoriteBrandsStep, { type Brand } from "./quiz/FavoriteBrandsStep";
+import MarketplacesStep from "./quiz/MarketplacesStep";
+import type { MarketplacesAnswer } from "@/types/marketplaces";
 import MeasurementsStep, { type SizeProfile } from "./quiz/MeasurementsStep";
 import UseCaseStep from "./quiz/UseCaseStep";
 import { type SelectedUseCase } from "./quiz/usecases.config";
@@ -32,7 +34,7 @@ interface QuizData {
   favorite_brands: Brand[];
   favorite_brands_custom: string[];
   auto_pick_brands: boolean;
-  marketplaces: string[];
+  marketplaces: MarketplacesAnswer;
   avoid_items: string[];
 
 }
@@ -78,7 +80,7 @@ export function Quiz({ onClose }: QuizProps) {
     favorite_brands: [],
     favorite_brands_custom: [],
     auto_pick_brands: false,
-    marketplaces: [],
+    marketplaces: { any_ok: false, preferred: [], excluded: [] },
     avoid_items: [],
 
   });
@@ -272,33 +274,10 @@ export function Quiz({ onClose }: QuizProps) {
         return (
           <div>
             <h2 className="mb-6 text-xl font-semibold">Маркетплейсы</h2>
-            <div className="space-y-2">
-              {[
-                { value: "wb", label: "Wildberries" },
-                { value: "ozon", label: "Ozon" },
-                { value: "ymarket", label: "Я.Маркет" },
-                { value: "any", label: "Любой" },
-              ].map((m) => (
-                <label
-                  key={m.value}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg border p-3 hover:bg-gray-50"
-                >
-                  <input
-                    type="checkbox"
-                    checked={data.marketplaces.includes(m.value)}
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      update({
-                        marketplaces: checked
-                          ? [...data.marketplaces, m.value]
-                          : data.marketplaces.filter((v) => v !== m.value),
-                      });
-                    }}
-                  />
-                  {m.label}
-                </label>
-              ))}
-            </div>
+            <MarketplacesStep
+              initial={data.marketplaces}
+              onChange={(m) => update({ marketplaces: m })}
+            />
           </div>
         );
       case "avoid_items":
@@ -405,6 +384,14 @@ export function Quiz({ onClose }: QuizProps) {
                   sendEvent("quiz_next_click", {
                     step: 10,
                     dislikedColors: data.color_dislike,
+                  });
+                }
+                if (stepId === "marketplaces") {
+                  sendEvent("quiz_next_click", {
+                    step: 12,
+                    any_ok: data.marketplaces.any_ok,
+                    preferred: data.marketplaces.preferred,
+                    excluded: data.marketplaces.excluded,
                   });
                 }
                 next();
