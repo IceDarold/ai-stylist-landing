@@ -5,6 +5,7 @@ import StyleStep from "./quiz/StyleStep";
 import ColorDislikeStep from "./quiz/ColorDislikeStep";
 import PhotoStep from "./quiz/PhotoStep";
 import FavoriteBrandsStep, { type Brand } from "./quiz/FavoriteBrandsStep";
+import MarketplacesStep, { type MarketplacesAnswer } from "./quiz/MarketplacesStep";
 
 interface QuizProps {
   onClose: () => void;
@@ -31,7 +32,7 @@ interface QuizData {
   favorite_brands: Brand[];
   favorite_brands_custom: string[];
   auto_pick_brands: boolean;
-  marketplaces: string[];
+  marketplaces: MarketplacesAnswer;
   avoid_items: string[];
 }
 
@@ -78,7 +79,7 @@ export function Quiz({ onClose }: QuizProps) {
     favorite_brands: [],
     favorite_brands_custom: [],
     auto_pick_brands: false,
-    marketplaces: [],
+    marketplaces: { any_ok: false, preferred: [], excluded: [] },
     avoid_items: [],
   });
   const [photoValid, setPhotoValid] = useState(false);
@@ -356,36 +357,10 @@ export function Quiz({ onClose }: QuizProps) {
         );
       case "marketplaces":
         return (
-          <div>
-            <h2 className="mb-6 text-xl font-semibold">Маркетплейсы</h2>
-            <div className="space-y-2">
-              {[
-                { value: "wb", label: "Wildberries" },
-                { value: "ozon", label: "Ozon" },
-                { value: "ymarket", label: "Я.Маркет" },
-                { value: "any", label: "Любой" },
-              ].map((m) => (
-                <label
-                  key={m.value}
-                  className="flex cursor-pointer items-center gap-2 rounded-lg border p-3 hover:bg-gray-50"
-                >
-                  <input
-                    type="checkbox"
-                    checked={data.marketplaces.includes(m.value)}
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      update({
-                        marketplaces: checked
-                          ? [...data.marketplaces, m.value]
-                          : data.marketplaces.filter((v) => v !== m.value),
-                      });
-                    }}
-                  />
-                  {m.label}
-                </label>
-              ))}
-            </div>
-          </div>
+          <MarketplacesStep
+            answer={data.marketplaces}
+            onChange={(ans) => update({ marketplaces: ans })}
+          />
         );
       case "avoid_items":
         return (
