@@ -3,8 +3,9 @@ import { ADMIN_SESSION_COOKIE, verifyAdminSession } from "@/lib/admin";
 import { AdminLoginForm } from "./AdminLoginForm";
 import { ALL_SLOTS } from "@/config/image-slots";
 
-export default function AdminPage() {
-  const token = cookies().get(ADMIN_SESSION_COOKIE)?.value;
+export default async function AdminPage() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
   const isAdmin = verifyAdminSession(token);
 
   if (!isAdmin) {
@@ -41,4 +42,3 @@ export default function AdminPage() {
     </section>
   );
 }
-

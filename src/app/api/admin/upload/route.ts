@@ -18,7 +18,8 @@ const ALLOWED = new Set([
 ]);
 
 export async function POST(req: Request) {
-  const token = cookies().get(ADMIN_SESSION_COOKIE)?.value;
+  const cookieStore = await cookies();
+  const token = cookieStore.get(ADMIN_SESSION_COOKIE)?.value;
   if (!verifyAdminSession(token)) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
