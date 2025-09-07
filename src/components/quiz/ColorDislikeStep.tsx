@@ -53,30 +53,31 @@ export default function ColorDislikeStep({ selected, onChange }: ColorDislikeSte
     if (exists) {
       const next = selected.filter((c) => c !== id);
       onChange(next);
-      sendEvent("color_dislike_deselect", { id, total: next.length });
+      sendEvent("color_favorite_deselect", { id, total: next.length });
       return;
     }
     if (count >= 3) {
       setLimitHit(true);
       setTimeout(() => setLimitHit(false), 2000);
-      sendEvent("color_dislike_limit_hit");
+      sendEvent("color_favorite_limit_hit");
       return;
     }
     const next = [...selected, id];
     onChange(next);
-    sendEvent("color_dislike_select", { id, total: next.length });
+    sendEvent("color_favorite_select", { id, total: next.length });
   };
 
   const clear = () => {
     onChange([]);
-    sendEvent("color_dislike_clear_all");
+    sendEvent("color_favorite_clear_all");
   };
 
   const handleAuto = () => {
     const next = !auto;
     setAuto(next);
     if (next) {
-      onChange(["bright"]);
+      // базовая палитра по умолчанию: 2 нейтральных + 1 акцент
+      onChange(["grey", "beige", "blue"]);
     } else {
       onChange([]);
     }
@@ -85,11 +86,11 @@ export default function ColorDislikeStep({ selected, onChange }: ColorDislikeSte
   return (
     <div>
       <div className="mb-2 flex items-baseline justify-between">
-        <h2 className="text-xl font-semibold">Не любим цвета (до 3)</h2>
+        <h2 className="text-xl font-semibold">Любимые цвета (до 3)</h2>
         <div className="text-sm text-gray-500">{count}/3</div>
       </div>
       <p className="mb-4 text-sm text-gray-500">
-        Выберите до трёх цветов, которые не любите. Это поможет не предлагать то, что точно не зайдёт
+        Выберите до трёх любимых цветов. Мы используем их как основу палитры подбора.
       </p>
       {GROUPS.map((g) => {
         const groupOptions = OPTIONS.filter((o) => o.group === g.id);
@@ -160,7 +161,7 @@ export default function ColorDislikeStep({ selected, onChange }: ColorDislikeSte
           onClick={clear}
           className="rounded-full border px-3 py-1 text-sm text-gray-600"
         >
-          Мне всё ок
+          Пропустить
         </button>
         <button
           type="button"
@@ -190,15 +191,13 @@ function sendEvent(event: string, props?: Record<string, unknown>) {
 }
 
 function PalettePreview({ selected }: { selected: string[] }) {
-  const available = OPTIONS.filter(
-    (c) => !selected.includes(c.id) && (c.hex || c.gradient)
-  );
-  if (available.length === 0) return null;
+  const chosen = OPTIONS.filter((c) => selected.includes(c.id) && (c.hex || c.gradient));
+  if (chosen.length === 0) return null;
   return (
     <div className="mt-6">
-      <div className="mb-1 text-xs text-gray-500">На основе ваших ответов:</div>
+      <div className="mb-1 text-xs text-gray-500">Ваша палитра:</div>
       <div className="flex overflow-hidden rounded">
-        {available.map((c) => (
+        {chosen.map((c) => (
           <span
             key={c.id}
             className="h-2 flex-1"

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useQuiz } from "./QuizProvider";
-import Image from "next/image";
+import { EditableImage } from "./EditableImage";
 
 export function Hero() {
   const { open } = useQuiz();
@@ -12,12 +12,14 @@ export function Hero() {
 
   return (
     <section id="hero" className="relative h-[100svh] min-h-[560px] w-full overflow-hidden">
-        <Image
-            src="/hero.jpg"            // положи файл в /public/hero.jpg (или .webp)
+        <EditableImage
+            slotId="hero.bg"
+            fallbackSrc="/hero.jpg"            
             alt=""
             priority
-            fill    
-            className="absolute inset-0 object-cover"  // ВАЖНО: cover = на весь экран
+            fill
+            containerClassName="absolute inset-0"
+            className="object-cover"
         />
       <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px]" />
       <div className="relative z-10 container h-full flex flex-col items-start justify-center">

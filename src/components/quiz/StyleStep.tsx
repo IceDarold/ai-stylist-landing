@@ -126,10 +126,6 @@ export default function StyleStep({ selected, onChange, useCase }: StyleStepProp
   return (
     <div>
       <div className="mb-4">
-        <div className="text-xs text-gray-500">Шаг 9/14</div>
-        <div className="my-1 h-1.5 w-full rounded bg-[#E9EAEC]">
-          <div className="h-full rounded bg-[var(--brand-500)]" style={{ width: `${(9 / 14) * 100}%` }} />
-        </div>
         <div className="flex items-baseline justify-between">
           <h2 className="text-2xl font-bold">Стиль (до 2)</h2>
           <span className={counterClass}>{limitHit ? "3/2" : `${count}/2`}</span>

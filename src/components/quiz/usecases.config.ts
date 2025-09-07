@@ -45,67 +45,44 @@ export const USE_CASES: UseCase[] = [
   {
     id: 'office',
     title: 'Офис',
-    icon: '/icons/usecases/office.svg',
+    icon: '/icons/usecases/office.png',
     popular: true,
-    subprops: [
-      { key: 'dress_code', type: 'enum', options: ['business_formal', 'smart_casual', 'free'] },
-    ],
   },
   {
     id: 'everyday',
     title: 'Каждый день',
-    icon: '/icons/usecases/everyday.svg',
+    icon: '/icons/usecases/everyday.png',
     popular: true,
-    subprops: [
-      { key: 'formality', type: 'enum', options: ['relaxed', 'smart_casual'] },
-    ],
   },
   {
     id: 'date',
     title: 'Свидание/вечер',
-    icon: '/icons/usecases/date.svg',
+    icon: '/icons/usecases/date.png',
     popular: true,
-    subprops: [
-      { key: 'place', type: 'enum', options: ['restaurant', 'walk', 'cinema'] },
-    ],
   },
   {
     id: 'weekend',
     title: 'Выходные/кэжуал',
-    icon: '/icons/usecases/weekend.svg',
+    icon: '/icons/usecases/weekend.png',
     popular: true,
-    subprops: [
-      { key: 'formality', type: 'enum', options: ['relaxed', 'smart_casual'] },
-    ],
   },
   {
     id: 'travel',
     title: 'Путешествие',
-    icon: '/icons/usecases/travel.svg',
+    icon: '/icons/usecases/travel.png',
     popular: true,
-    subprops: [
-      { key: 'climate', type: 'enum', options: ['hot', 'mild', 'cold'] },
-      { key: 'trip_duration', type: 'enum', options: ['2-3d', '1w', '2w+'] },
-    ],
   },
   {
     id: 'season',
     title: 'Сезонная капсула',
-    icon: '/icons/usecases/season.svg',
+    icon: '/icons/usecases/season.png',
     popular: true,
-    subprops: [
-      { key: 'season', type: 'enum', options: ['ss', 'aw', 'spring', 'summer', 'autumn', 'winter'] },
-    ],
   },
   {
     id: 'event',
     title: 'Событие',
-    icon: '/icons/usecases/event.svg',
+    icon: '/icons/usecases/event.png',
     popular: true,
-    subprops: [
-      { key: 'event_type', type: 'enum', options: ['wedding', 'grad', 'cocktail', 'corporate', 'other'] },
-      { key: 'date_known', type: 'enum', options: ['yes', 'no'] },
-    ],
   },
   { id: 'business_trip', title: 'Бизнес-поездка', icon: '/icons/usecases/business_trip.svg' },
   { id: 'wedding_guest', title: 'Свадьба', icon: '/icons/usecases/wedding_guest.svg' },
@@ -116,5 +93,4 @@ export const USE_CASES: UseCase[] = [
   { id: 'photo_shoot', title: 'Фотосессия', icon: '/icons/usecases/photo_shoot.svg' },
   { id: 'streetwear', title: 'Уличный стиль', icon: '/icons/usecases/streetwear.svg' },
   { id: 'vacation_beach', title: 'Отпуск-море', icon: '/icons/usecases/vacation_beach.svg' },
-  { id: 'outdoor', title: 'Outdoor/погода', icon: '/icons/usecases/outdoor.svg' },
 ];

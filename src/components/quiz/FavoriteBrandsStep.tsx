@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-export type Brand = { id: string; name: string; tier: "mass" | "premium" | "luxury"; logo_url?: string };
+export type Brand = { id: string; name: string; logo_url?: string; tier?: "mass" | "premium" | "luxury" | null };
 
 interface FavoriteBrandsStepProps {
   initialSelected?: Brand[];
@@ -17,26 +17,30 @@ export default function FavoriteBrandsStep({
   onChange,
 }: FavoriteBrandsStepProps) {
   const [q, setQ] = useState("");
+  const [focused, setFocused] = useState(false);
   const [selected, setSelected] = useState<Brand[]>(initialSelected);
   const [custom, setCustom] = useState<string[]>(initialCustom);
   const [autoPick, setAutoPick] = useState(initialAutoPick);
-  const [tierTab, setTierTab] = useState<Brand["tier"]>("mass");
   const [popular, setPopular] = useState<Brand[]>([]);
   const [results, setResults] = useState<Brand[]>([]);
+  const listRef = useRef<HTMLUListElement>(null);
   const limit = 3;
   const totalSelected = selected.length + custom.length;
   const canAdd = totalSelected < limit && !autoPick;
 
   useEffect(() => {
-    fetch(`/api/brands/popular?tier=${tierTab}`)
+    fetch(`/api/brands/popular`)
       .then((r) => r.json())
       .then(setPopular)
       .catch(() => setPopular([]));
-  }, [tierTab]);
+  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => {
-      if (!q.trim()) return setResults([]);
+      if (!q.trim()) {
+        setResults([]);
+        return;
+      }
       fetch(`/api/brands/search?q=${encodeURIComponent(q.trim())}`)
         .then((r) => r.json())
         .then(setResults)
@@ -60,12 +64,17 @@ export default function FavoriteBrandsStep({
   const remove = (id: string) => setSelected((s) => s.filter((x) => x.id !== id));
   const removeCustom = (idx: number) => setCustom((c) => c.filter((_, i) => i !== idx));
 
-  const addCustom = () => {
+  const addCustomFromQuery = () => {
     if (!canAdd) return;
-    const name = prompt("Введите название бренда");
+    const name = q.trim();
     if (!name) return;
     setCustom((c) => [...c, name]);
+    setQ("");
+    setResults([]);
   };
+
+  const showDropdown = focused && canAdd && ((q.trim() && results.length >= 0) || (!q.trim() && popular.length > 0));
+  const dropdownItems: Brand[] = q.trim() ? results : popular;
 
   return (
     <div className="space-y-5">
@@ -75,17 +84,24 @@ export default function FavoriteBrandsStep({
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={(e) => {
+            // delay to allow click on dropdown
+            setTimeout(() => setFocused(false), 150);
+          }}
           placeholder={autoPick ? "Автовыбор включён" : "Начните вводить: Zara, COS…"}
           disabled={!canAdd}
           aria-disabled={!canAdd}
           className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 outline-none disabled:bg-black/5"
         />
-        {q && results.length > 0 && (
+
+        {showDropdown && (
           <ul
+            ref={listRef}
             role="listbox"
-            className="absolute z-10 mt-2 w-full overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg"
+            className="absolute z-10 mt-2 w-full overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg max-h-72 overflow-y-auto"
           >
-            {results.map((b) => (
+            {(dropdownItems || []).map((b) => (
               <li
                 key={b.id}
                 role="option"
@@ -104,9 +120,19 @@ export default function FavoriteBrandsStep({
                   <div className="h-6 w-6 rounded bg-black/10" />
                 )}
                 <span className="flex-1">{b.name}</span>
-                <span className="text-xs text-black/50 uppercase">{b.tier}</span>
               </li>
             ))}
+
+            {/* Offer to add custom when no results */}
+            {q.trim() && results.length === 0 && (
+              <li
+                role="option"
+                onClick={addCustomFromQuery}
+                className="cursor-pointer px-4 py-2 text-sm text-black/70 hover:bg-black/5"
+              >
+                Добавить «{q.trim()}»
+              </li>
+            )}
           </ul>
         )}
       </div>
@@ -157,21 +183,7 @@ export default function FavoriteBrandsStep({
         )}
       </div>
 
-      {/* Tabs + popular */}
-      <div className="flex items-center gap-2 rounded-full bg-black/5 p-1 w-max">
-        {(["mass", "premium", "luxury"] as const).map((t) => (
-          <button
-            key={t}
-            onClick={() => setTierTab(t)}
-            className={`rounded-full px-3 py-1 text-sm ${
-              tierTab === t ? "bg-white shadow border border-black/10" : "text-black/60"
-            }`}
-          >
-            {t === "mass" ? "Mass" : t === "premium" ? "Premium" : "Luxury"}
-          </button>
-        ))}
-      </div>
-
+      {/* Popular grid (random) */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
         {popular.map((b) => {
           const chosen = !!selected.find((x) => x.id === b.id);
@@ -216,14 +228,6 @@ export default function FavoriteBrandsStep({
           }`}
         >
           Не знаю брендов — подобрать по стилю
-        </button>
-
-        <button
-          onClick={addCustom}
-          disabled={!canAdd}
-          className="rounded-full bg-black/5 px-3 py-1 text-sm text-black/70 disabled:opacity-50"
-        >
-          Добавить другой
         </button>
       </div>
     </div>

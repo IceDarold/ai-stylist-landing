@@ -65,36 +65,7 @@ export default function UseCaseStep({ selected, autoPick, onChange }: UseCaseSte
   return (
     <div>
       <h2 className="text-xl font-semibold mb-2">Под что собираем капсулу?</h2>
-      <p className="mb-4 text-sm text-gray-600">Можно выбрать до трёх. Перетащите выбранные, чтобы задать приоритет</p>
-
-      {selected.length > 0 && (
-        <div className="mb-4 flex flex-wrap gap-2">
-          {selected.map((s, i) => {
-            const uc = USE_CASES.find((u) => u.id === s.id)!;
-            return (
-              <div key={s.id} className="flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-sm">
-                <span>{i + 1}. {uc.title}</span>
-                <div className="flex flex-col leading-none">
-                  <button
-                    aria-label="Вверх"
-                    disabled={i === 0}
-                    onClick={() => move(i, i - 1)}
-                  >
-                    ▲
-                  </button>
-                  <button
-                    aria-label="Вниз"
-                    disabled={i === selected.length - 1}
-                    onClick={() => move(i, i + 1)}
-                  >
-                    ▼
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
+      <p className="mb-4 text-sm text-gray-600">Можно выбрать до трёх.</p>
 
       <div
         className="grid grid-cols-2 sm:grid-cols-4 gap-4"

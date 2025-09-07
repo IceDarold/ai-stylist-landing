@@ -1,15 +1,29 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export function HowItWorks() {
-  const looks = ["/items/person-1.png", "/items/person-2.png", "/items/person-3.png"];
-  const items = [
-    "/items/top-1.jpg",
-    "/items/top-2.jpg",
-    "/items/top-3.jpg",
-    "/items/bottom-1.jpg",
-    "/items/bottom-2.jpg",
-    "/items/bottom-3.jpg",
+  // Используем 3 подготовленных изображения без обрезания
+  const stepImages = [
+    { src: "/how_it_works/1.jpg", alt: "Загрузите фото" },
+    { src: "/how_it_works/2.jpg", alt: "AI-стилист подбирает образы" },
+    { src: "/how_it_works/3.jpg", alt: "Готовая капсула вещей" },
   ];
+
+  // Набор сменяющихся картинок в середине
+  const looks = [
+    "/items/person-1.png",
+    "/items/person-2.png",
+    "/items/person-3.png",
+    "/items/person-4.png",
+  ];
+  const [lookIndex, setLookIndex] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setLookIndex((i) => (i + 1) % looks.length);
+    }, 3000); // смена каждые 3 секунды
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <section id="how" className="py-24" aria-labelledby="hiw-title">
@@ -21,12 +35,12 @@ export function HowItWorks() {
         <div className="mt-12 grid gap-12 md:grid-cols-3" aria-label="Как это работает">
           {/* Шаг 1 */}
           <div className="flex flex-col items-start">
-            <figure className="relative aspect-[3/4] w-full overflow-hidden rounded-xl">
+            <figure className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#EEE7DD]">
               <Image
-                src="/person.jpg"
-                alt="Пример фото"
+                src={stepImages[0].src}
+                alt={stepImages[0].alt}
                 fill
-                className="object-cover"
+                className="object-contain"
                 sizes="(max-width:768px) 100vw, 33vw"
                 priority
               />
@@ -43,26 +57,19 @@ export function HowItWorks() {
           {/* Шаг 2 */}
           <div className="flex flex-col items-start">
             {/* фрейм той же высоты, что и слева */}
-            <div className="relative w-full aspect-[3/4]">
-              <div className="absolute inset-0 grid grid-cols-3 gap-2">
-                {looks.map((src) => (
-                  <div
-                    key={src}
-                    className="relative h-full w-full overflow-hidden rounded-lg"
-                  >
-                    <Image
-                      src={src}
-                      alt="Пример образа"
-                      fill
-                      className="object-cover"
-                      sizes="(max-width:768px) 33vw, 11vw"
-                    />
-                  </div>
-                ))}
-              </div>
+            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#EEE7DD]">
+              <Image
+                key={looks[lookIndex]}
+                src={looks[lookIndex]}
+                alt={stepImages[1].alt}
+                fill
+                className="object-contain transition-opacity duration-700"
+                sizes="(max-width:768px) 100vw, 33vw"
+                priority={false}
+              />
             </div>
             <p className="mt-4 text-lg font-medium">
-              AI-стилист собирает 3 персональных образа…
+              AI-стилист собирает 3 персональных образа
             </p>
             <span className="badge neutral mt-2">&lt;30 секунд</span>
           </div>
@@ -70,29 +77,20 @@ export function HowItWorks() {
           {/* Шаг 3 */}
           <div className="flex flex-col items-start">
             {/* такой же фрейм */}
-            <div className="relative w-full aspect-[3/4]">
-              <div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-2">
-                {items.map((src) => (
-                  <div
-                    key={src}
-                    className="relative h-full w-full overflow-hidden rounded-md"
-                  >
-                    <Image
-                      src={src}
-                      alt="Товар из капсулы"
-                      fill
-                      className="object-cover"
-                      sizes="(max-width:768px) 33vw, 11vw"
-                    />
-                  </div>
-                ))}
-              </div>
+            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#EEE7DD]">
+              <Image
+                src={stepImages[2].src}
+                alt={stepImages[2].alt}
+                fill
+                className="object-contain"
+                sizes="(max-width:768px) 100vw, 33vw"
+              />
               <span className="badge brand absolute left-2 top-2 z-10">
                 Капсула за 25 000 ₽
               </span>
             </div>
             <p className="mt-4 text-lg font-medium">
-              Сразу переходите к покупке…
+              Сразу переходите к покупке
             </p>
             <span className="badge neutral mt-2">&lt;30 секунд</span>
           </div>

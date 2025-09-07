@@ -21,19 +21,11 @@ export function validateFile(file: File): string | null {
 
 interface PhotoStepProps {
   file: File | null;
-  hideFace: boolean;
   onChange: (file: File | null) => void;
-  onHideFaceChange: (v: boolean) => void;
   onValidChange: (v: boolean) => void;
 }
 
-export default function PhotoStep({
-  file,
-  hideFace,
-  onChange,
-  onHideFaceChange,
-  onValidChange,
-}: PhotoStepProps) {
+export default function PhotoStep({ file, onChange, onValidChange }: PhotoStepProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState(false);
@@ -102,7 +94,7 @@ export default function PhotoStep({
           <p className="text-sm text-gray-500">
             JPG/PNG/HEIC/WEBP, до 15 МБ, лучше в полный рост
           </p>
-          <button className="button mt-4" onClick={openFile}>
+          <button className="button mt-4" type="button">
             Выбрать файл
           </button>
         </div>
@@ -112,13 +104,10 @@ export default function PhotoStep({
             <img
               src={preview}
               alt="Загруженное фото"
-              className={clsx(
-                "max-h-96 w-full object-contain",
-                hideFace && "blur-md"
-              )}
+              className={clsx("max-h-96 w-full object-contain")}
             />
             <div className="absolute inset-0 flex items-start justify-end gap-2 p-2">
-              <button className="button" onClick={openFile}>
+              <button className="button" type="button" onClick={openFile}>
                 Заменить фото
               </button>
               <button
@@ -132,11 +121,6 @@ export default function PhotoStep({
               </button>
             </div>
           </div>
-          {hideFace && (
-            <div className="text-xs text-gray-600">
-              Лицо будет скрыто на визуализациях
-            </div>
-          )}
         </div>
       )}
       <input
@@ -147,14 +131,6 @@ export default function PhotoStep({
         className="hidden"
         onChange={(e) => handleFiles(e.target.files)}
       />
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={hideFace}
-          onChange={(e) => onHideFaceChange(e.target.checked)}
-        />
-        Скрыть лицо
-      </label>
       {error && <div className="text-sm text-red-500">{error}</div>}
       <ul className="list-disc space-y-1 pl-5 text-xs text-gray-500">
         <li>Попросите ровную стойку, руки свободны</li>

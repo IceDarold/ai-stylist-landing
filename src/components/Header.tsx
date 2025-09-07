@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { EditableImage } from "./EditableImage";
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -17,10 +17,16 @@ export function Header() {
   return (
     <>
       {/* Main header */}
-      <header className="bg-white/100 backdrop-blur sticky top-0 z-50 w-full">
+      <header className="bg-white/0 backdrop-blur sticky top-0 z-50 w-full">
         <div className="container flex items-center justify-between py-4">
-          <Link href="/" className="flex items-center" aria-label="Stylist AI">
-            <Image src="/logo.svg" alt="Stylist AI" width={120} height={24} />
+          <Link href="/" className="flex items-center" aria-label="Neo AI">
+            <EditableImage
+              slotId="brand.logo"
+              fallbackSrc="/logo.png"
+              alt="Neo AI"
+              width={120}
+              height={24}
+            />
           </Link>
 
           {/* Desktop navigation */}
