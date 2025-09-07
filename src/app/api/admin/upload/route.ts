@@ -69,8 +69,8 @@ export async function POST(req: Request) {
 
     const pub = supa.storage.from(bucket).getPublicUrl(path).data.publicUrl;
     return NextResponse.json({ ok: true, url: pub });
-  } catch (e: any) {
-    return new NextResponse(e?.message || "Upload failed", { status: 500 });
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : "Upload failed";
+    return new NextResponse(message, { status: 500 });
   }
 }
-

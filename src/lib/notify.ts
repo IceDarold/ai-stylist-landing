@@ -14,7 +14,7 @@ export async function notifyTG(text: string) {
       .select("chat_id")
       .eq("active", true);
     if (data && data.length > 0) {
-      chatIds = data.map((r: any) => r.chat_id);
+      chatIds = data.map((r) => (r as { chat_id: string | number }).chat_id);
     }
   } catch {
     // ignore

@@ -1,3 +1,5 @@
+type SlotDef = { label: string; fallback: string };
+
 export const IMAGE_SLOTS = {
   "hero.bg": {
     label: "Hero background",
@@ -8,13 +10,20 @@ export const IMAGE_SLOTS = {
     // Use existing raster logo in public/
     fallback: "/logo.png",
   },
-} as const;
+} as const satisfies Record<string, SlotDef>;
 
 export type SlotId = keyof typeof IMAGE_SLOTS;
 
-export function getFallbackForSlot(slotId: string): string | null {
-  return (IMAGE_SLOTS as any)[slotId]?.fallback ?? null;
+export function isSlotId(value: string): value is SlotId {
+  return value in IMAGE_SLOTS;
 }
 
-export const ALL_SLOTS: { id: string; label: string; fallback: string }[] =
-  Object.entries(IMAGE_SLOTS).map(([id, v]) => ({ id, ...(v as any) }));
+export function getFallbackForSlot(slotId: string): string | null {
+  return isSlotId(slotId)
+    ? IMAGE_SLOTS[slotId].fallback
+    : null;
+}
+
+export const ALL_SLOTS: { id: string; label: string; fallback: string }[] = (
+  Object.entries(IMAGE_SLOTS) as [SlotId, (typeof IMAGE_SLOTS)[SlotId]][]
+).map(([id, v]) => ({ id, label: v.label, fallback: v.fallback }));
