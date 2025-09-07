@@ -60,12 +60,7 @@ function ok() {
 
 export async function POST(req: Request) {
   try {
-    // Optional webhook secret verification (recommended)
-    const requiredSecret = process.env.TELEGRAM_WEBHOOK_SECRET;
-    if (requiredSecret) {
-      const got = req.headers.get("x-telegram-bot-api-secret-token");
-      if (got !== requiredSecret) return new NextResponse("Forbidden", { status: 403 });
-    }
+    // Webhook secret check disabled by request.
 
     const update = (await req.json()) as TGUpdate;
 

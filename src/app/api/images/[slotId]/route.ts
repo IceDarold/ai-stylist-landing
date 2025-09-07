@@ -1,14 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase-server";
 import { getFallbackForSlot } from "@/config/image-slots";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  _req: Request,
-  { params }: { params: { slotId: string } }
+  _req: NextRequest,
+  ctx: { params: Promise<{ slotId: string }> }
 ) {
-  const slotId = params.slotId;
+  const { slotId } = await ctx.params;
   const fallback = getFallbackForSlot(slotId);
   if (!fallback) {
     return NextResponse.json({ error: "Unknown slot" }, { status: 404 });
@@ -41,4 +41,3 @@ export async function GET(
     return NextResponse.json({ url: fallback });
   }
 }
-

@@ -17,13 +17,27 @@ export function HowItWorks() {
     "/items/person-3.png",
     "/items/person-4.png",
   ];
+  // Простая карусель для среднего шага с слайдом вправо
   const [lookIndex, setLookIndex] = useState(0);
+  const [isSliding, setIsSliding] = useState(false);
+
+  // каждые 3 секунды запускаем анимацию
   useEffect(() => {
     const id = setInterval(() => {
-      setLookIndex((i) => (i + 1) % looks.length);
-    }, 3000); // смена каждые 3 секунды
+      setIsSliding(true);
+    }, 3000);
     return () => clearInterval(id);
   }, []);
+
+  // по окончании анимации фиксируем следующий индекс
+  useEffect(() => {
+    if (!isSliding) return;
+    const t = setTimeout(() => {
+      setLookIndex((i) => (i + 1) % looks.length);
+      setIsSliding(false); // возвращаем трек на место
+    }, 700); // должно совпадать с duration-700 ниже
+    return () => clearTimeout(t);
+  }, [isSliding]);
 
   return (
     <section id="how" className="py-24" aria-labelledby="hiw-title">
@@ -32,9 +46,9 @@ export function HowItWorks() {
           Как это работает — 3 шага и готовые образы
         </h2>
 
-        <div className="mt-12 grid gap-12 md:grid-cols-3" aria-label="Как это работает">
+        <div className="mt-10 grid gap-8 md:grid-cols-3" aria-label="Как это работает">
           {/* Шаг 1 */}
-          <div className="flex flex-col items-start">
+          <div className="card hover:shadow-2 transition-transform duration-300 hover:-translate-y-0.5 flex flex-col items-start">
             <figure className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#EEE7DD]">
               <Image
                 src={stepImages[0].src}
@@ -55,18 +69,42 @@ export function HowItWorks() {
           </div>
 
           {/* Шаг 2 */}
-          <div className="flex flex-col items-start">
+          <div className="card hover:shadow-2 transition-transform duration-300 hover:-translate-y-0.5 flex flex-col items-start">
             {/* фрейм той же высоты, что и слева */}
             <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#EEE7DD]">
-              <Image
-                key={looks[lookIndex]}
-                src={looks[lookIndex]}
-                alt={stepImages[1].alt}
-                fill
-                className="object-contain transition-opacity duration-700"
-                sizes="(max-width:768px) 100vw, 33vw"
-                priority={false}
-              />
+              {/* Трек из двух слайдов. Сдвигаем его влево, визуально листая вправо */}
+              <div
+                className={`absolute top-0 left-0 h-full w-[200%] flex ${
+                  isSliding ? "transition-transform duration-700 ease-out-soft" : "transition-none"
+                }`}
+                style={{ transform: isSliding ? "translateX(-50%)" : "translateX(0%)" }}
+                aria-hidden
+              >
+                {/* Текущий */}
+                <div className="relative h-full w-1/2">
+                  <Image
+                    key={`curr-${looks[lookIndex]}`}
+                    src={looks[lookIndex]}
+                    alt={stepImages[1].alt}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width:768px) 100vw, 33vw"
+                    priority={false}
+                  />
+                </div>
+                {/* Следующий */}
+                <div className="relative h-full w-1/2">
+                  <Image
+                    key={`next-${looks[(lookIndex + 1) % looks.length]}`}
+                    src={looks[(lookIndex + 1) % looks.length]}
+                    alt={stepImages[1].alt}
+                    fill
+                    className="object-contain"
+                    sizes="(max-width:768px) 100vw, 33vw"
+                    priority={false}
+                  />
+                </div>
+              </div>
             </div>
             <p className="mt-4 text-lg font-medium">
               AI-стилист собирает 3 персональных образа
@@ -75,7 +113,7 @@ export function HowItWorks() {
           </div>
 
           {/* Шаг 3 */}
-          <div className="flex flex-col items-start">
+          <div className="card hover:shadow-2 transition-transform duration-300 hover:-translate-y-0.5 flex flex-col items-start">
             {/* такой же фрейм */}
             <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#EEE7DD]">
               <Image
