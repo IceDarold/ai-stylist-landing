@@ -11,8 +11,8 @@ export const metadata: Metadata = { /* ... */ };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" data-theme="light">
-      <body className="bg-bg-base text-fg-primary font-sans antialiased">
+    <html lang="ru" data-theme="light" className="overflow-x-hidden">
+      <body className="bg-bg-base text-fg-primary font-sans antialiased overflow-x-hidden">
         <AnalyticsProvider>
           <QuizProvider>
             <Header />
