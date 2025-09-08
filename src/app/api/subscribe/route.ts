@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase-server";
 import { notifyTG } from "@/lib/notify";
 import { subscribeSchema } from "@/lib/validators";
+import { trackMetrica } from "@/lib/metrica";
 
 const rateMap = new Map<string, { count: number; time: number }>();
 
@@ -45,6 +46,8 @@ export async function POST(req: Request) {
         lead_id: lead.id,
       });
     if (eventError) throw eventError;
+
+    trackMetrica("lead_submitted");
 
     await notifyTG(`🆕 Новый лид: ${email}${source ? ` (${source})` : ""}`);
 
