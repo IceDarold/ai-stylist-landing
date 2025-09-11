@@ -1,10 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { EditableImage } from "./EditableImage";
 
 export function Header() {
+  const pathname = usePathname();
+  // Hide the global header for experimental pages
+  if (pathname?.startsWith("/experimental/")) return null;
   const [menuOpen, setMenuOpen] = useState(false);
   const navItems = [
     { href: "#benefits", label: "Преимущества" },

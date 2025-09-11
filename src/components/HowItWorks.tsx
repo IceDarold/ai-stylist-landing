@@ -48,8 +48,8 @@ export function HowItWorks() {
 
         <div className="mt-10 grid gap-8 md:grid-cols-3" aria-label="Как это работает">
           {/* Шаг 1 */}
-          <div className="card hover:shadow-2 transition-transform duration-300 hover:-translate-y-0.5 flex flex-col items-start">
-            <figure className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#EEE7DD]">
+          <div className="flex flex-col items-start">
+            <figure className="relative aspect-[3/4] w-full overflow-hidden rounded-xl">
               <Image
                 src={stepImages[0].src}
                 alt={stepImages[0].alt}
@@ -69,9 +69,9 @@ export function HowItWorks() {
           </div>
 
           {/* Шаг 2 */}
-          <div className="card hover:shadow-2 transition-transform duration-300 hover:-translate-y-0.5 flex flex-col items-start">
+          <div className="flex flex-col items-start">
             {/* фрейм той же высоты, что и слева */}
-            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#EEE7DD]">
+            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl">
               {/* Трек из двух слайдов. Сдвигаем его влево, визуально листая вправо */}
               <div
                 className={`absolute top-0 left-0 h-full w-[200%] flex ${
@@ -113,9 +113,9 @@ export function HowItWorks() {
           </div>
 
           {/* Шаг 3 */}
-          <div className="card hover:shadow-2 transition-transform duration-300 hover:-translate-y-0.5 flex flex-col items-start">
+          <div className="flex flex-col items-start">
             {/* такой же фрейм */}
-            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-[#EEE7DD]">
+            <div className="relative w-full aspect-[3/4] overflow-hidden rounded-xl">
               <Image
                 src={stepImages[2].src}
                 alt={stepImages[2].alt}
