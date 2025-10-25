@@ -55,7 +55,7 @@ export function TryOn() {
         </div>
 
         {/* Визуализация справа */}
-        <div className="relative grid grid-cols-[minmax(320px,1fr)_auto] items-center justify-items-center gap-10 md:gap-12">
+        <div className="relative grid grid-cols-1 items-center justify-items-center gap-10 sm:grid-cols-[minmax(320px,1fr)_auto] md:gap-12">
 
           {/* PERSON — без рамок/фона, PNG будет на прозрачном */}
           <div className="relative aspect-[3/4] w-full max-w-[1060px] md:max-w-[640px] justify-self-center">
@@ -74,7 +74,7 @@ export function TryOn() {
           {/* ITEMS — прозрачные плитки, только подпись */}
           <div className="relative flex flex-col items-center gap-8 md:gap-10">
             {/* TOP */}
-            <figure className="flex w-[190px] flex-col items-center">
+            <figure className="flex w-40 sm:w-48 flex-col items-center">
               <Image
                 key={top}
                 src={top}
@@ -90,7 +90,7 @@ export function TryOn() {
             </figure>
 
             {/* BOTTOM */}
-            <figure className="flex w-[190px] flex-col items-center">
+            <figure className="flex w-40 sm:w-48 flex-col items-center">
               <Image
                 key={bottom}
                 src={bottom}
@@ -114,7 +114,7 @@ export function TryOn() {
             aria-hidden
             width={220}
             height={18}
-            className="pointer-events-none absolute -left-4 top-[20%] hidden md:block opacity-50"
+            className="pointer-events-none absolute -left-4 top-[20%] hidden sm:block opacity-50"
           />
           <Image
             src="/line-1.svg"
@@ -122,7 +122,7 @@ export function TryOn() {
             aria-hidden
             width={220}
             height={18}
-            className="pointer-events-none absolute bottom-[20%] hidden md:block opacity-50 rotate-180"
+            className="pointer-events-none absolute bottom-[20%] hidden sm:block opacity-50 rotate-180"
           />
         </div>
       </div>
